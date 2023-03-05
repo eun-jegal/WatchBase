@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">WatchBase</string>
+    <string name="home">Home</string>
+    <string name="search">Search</string>
+    <string name="my_list">My list</string>
+    <string name="category_tv_show">TV Show</string>
+    <string name="category_movies">Movies</string>
+    <string name="genres">Genres</string>
+    <string name="title_top_rated">Top Rated</string>
+    <string name="title_popular">Popular</string>
+    <string name="title_top_searches">Top Searches</string>
+</resources>
