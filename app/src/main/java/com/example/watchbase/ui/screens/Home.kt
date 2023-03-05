@@ -13,6 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.bumptech.glide.integration.compose.GlideImage
 import com.example.watchbase.R
 import com.example.watchbase.ui.screens.designsystem.Chip
 import com.example.watchbase.ui.screens.designsystem.Heading
