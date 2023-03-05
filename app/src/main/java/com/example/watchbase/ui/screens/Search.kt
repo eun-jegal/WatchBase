@@ -21,7 +21,7 @@ fun Search(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         SearchBar(modifier = modifier)
         Heading(title = stringResource(id = R.string.title_top_searches))
@@ -38,7 +38,6 @@ fun SearchBar(modifier: Modifier) {
         },
         modifier = modifier
             .fillMaxWidth()
-            .height(54.dp)
             .padding(bottom = 16.dp),
         leadingIcon = {
             Icon(

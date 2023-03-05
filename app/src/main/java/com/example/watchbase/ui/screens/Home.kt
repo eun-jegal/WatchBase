@@ -24,7 +24,7 @@ fun Home(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         TVShowOrMovieChips(modifier)
         GenreList(modifier)
