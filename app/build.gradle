@@ -52,6 +52,8 @@ dependencies {
     implementation "androidx.navigation:navigation-compose:$nav_version"
 
     implementation "com.github.bumptech.glide:compose:1.0.0-alpha.1"
+    // Pagination
+    implementation "androidx.paging:paging-compose:1.0.0-alpha15"
 
     // Retrofit & Gson
     def retrofit_version = "2.9.0"
