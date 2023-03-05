@@ -1,11 +1,13 @@
-package com.example.watchbase.data.api
+package com.example.watchbase.data.remote.api
 
 import com.example.watchbase.BuildConfig
+import com.example.watchbase.data.model.GenreList
 import com.example.watchbase.data.model.ShowList
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface TMDBService {
+    // Tv Shows
     @GET("tv/top_rated")
     suspend fun getTopRatedTvShows(
         @Query("page")
@@ -46,6 +48,15 @@ interface TMDBService {
         apiKey: String = BuildConfig.API_KEY
     ): ShowList
 
+    @GET("/genre/tv/list")
+    suspend fun getTvShowGenres(
+        @Query("language")
+        language: String = "en",
+        @Query("api_key")
+        apiKey: String = BuildConfig.API_KEY
+    ): GenreList
+
+    // Movies
     @GET("movie/top_rated")
     suspend fun getTopRatedMovies(
         @Query("page")
@@ -95,5 +106,13 @@ interface TMDBService {
         @Query("api_key")
         apiKey: String = BuildConfig.API_KEY
     ): ShowList
+
+    @GET("/genre/movie/list")
+    suspend fun getMovieGenres(
+        @Query("language")
+        language: String = "en",
+        @Query("api_key")
+        apiKey: String = BuildConfig.API_KEY
+    ): GenreList
 
 }

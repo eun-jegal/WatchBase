@@ -1,6 +1,7 @@
 package com.example.watchbase.data.remote
 
-import com.example.watchbase.data.api.TMDBService
+import com.example.watchbase.data.model.GenreList
+import com.example.watchbase.data.remote.api.TMDBService
 import com.example.watchbase.data.model.ShowList
 
 class WatchBaseRemoteDataSourceImpl(
@@ -22,6 +23,10 @@ class WatchBaseRemoteDataSourceImpl(
         return tmdbService.getNowPlayingTvShows()
     }
 
+    override suspend fun getTvShowGenres(): GenreList {
+        return tmdbService.getTvShowGenres()
+    }
+
     override suspend fun getTopRatedMovies(): ShowList {
         return tmdbService.getTopRatedMovies()
     }
@@ -40,5 +45,9 @@ class WatchBaseRemoteDataSourceImpl(
 
     override suspend fun getUpcomingMovies(): ShowList {
         return tmdbService.getUpcomingMovies()
+    }
+
+    override suspend fun getMovieGenres(): GenreList {
+        return tmdbService.getMovieGenres()
     }
 }
