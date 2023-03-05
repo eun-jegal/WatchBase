@@ -1,8 +1,8 @@
 package com.example.watchbase.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -13,7 +13,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bumptech.glide.integration.compose.GlideImage
 import com.example.watchbase.R
 import com.example.watchbase.ui.screens.designsystem.Chip
 import com.example.watchbase.ui.screens.designsystem.Heading
@@ -25,7 +24,7 @@ fun Home(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .padding(vertical = 8.dp)
     ) {
         TVShowOrMovieChips(modifier)
         GenreList(modifier)
@@ -42,15 +41,23 @@ fun Home(
 
 @Composable
 fun TVShowOrMovieChips(modifier: Modifier) {
-    Row(
+    Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
+            .fillMaxHeight(0.35f)
+            .background(color = Color.Black)
     ) {
-        Chip(selected = true, text = stringResource(id = R.string.category_tv_show))
-        Chip(selected = false, text = stringResource(id = R.string.category_movies))
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp)
+                .align(Alignment.TopStart),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Chip(selected = true, text = stringResource(id = R.string.category_tv_show))
+            Chip(selected = false, text = stringResource(id = R.string.category_movies))
+        }
     }
 }
 
@@ -59,7 +66,7 @@ fun GenreList(modifier: Modifier) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp),
+            .padding(horizontal = 16.dp, vertical = 4.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text(
@@ -109,7 +116,7 @@ fun HeadingAndCarousel(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         Heading(title = title)
         Spacer(modifier = modifier.height(12.dp))
