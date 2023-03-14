@@ -3,6 +3,7 @@ package com.example.watchbase.ui.screens.designsystem
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -12,10 +13,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun Chip(
     selected: Boolean,
     text: String,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Surface(
@@ -35,7 +38,8 @@ fun Chip(
                 else -> Color.LightGray
             }
         ),
-        modifier = modifier
+        modifier = modifier,
+        onClick = { onClick() }
     ) {
         // Add text to show the data that we passed
         Text(

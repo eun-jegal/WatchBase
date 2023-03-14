@@ -16,11 +16,13 @@ import com.example.watchbase.ui.screens.Home
 import com.example.watchbase.ui.screens.MyList
 import com.example.watchbase.ui.screens.Screen
 import com.example.watchbase.ui.screens.Search
+import com.example.watchbase.ui.viewmodel.HomeViewModel
 
 @Composable
 fun AppNavHost(
+    homeViewModel: HomeViewModel,
+    navController: NavHostController,
     modifier: Modifier = Modifier,
-    navController: NavHostController
 ) {
     NavHost(
         navController = navController,
@@ -30,7 +32,7 @@ fun AppNavHost(
             .background(color = colorResource(id = R.color.app_background)),
         builder = {
             composable(Screen.Home.route) {
-                Home()
+                Home(homeViewModel = homeViewModel, modifier = modifier)
             }
             composable(Screen.Search.route) {
                 Search()
