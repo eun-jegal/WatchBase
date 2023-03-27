@@ -1,12 +1,13 @@
 package com.example.watchbase.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,10 +19,8 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
+import coil.compose.AsyncImage
 import com.example.watchbase.R
-import com.example.watchbase.data.model.Genre
 import com.example.watchbase.data.model.Show
 import com.example.watchbase.data.model.ShowType
 import com.example.watchbase.ui.screens.designsystem.Chip
@@ -39,46 +38,11 @@ fun Home(
         modifier = modifier
             .fillMaxSize()
             .padding(vertical = 8.dp)
+            .verticalScroll(rememberScrollState())
     ) {
         TVShowOrMovieChips(homeViewModel = homeViewModel, modifier = modifier)
         GenreList(viewModel = homeViewModel, modifier = modifier)
         ShowList(homeViewModel = homeViewModel, modifier = modifier)
-    }
-}
-
-@Composable
-fun ShowList(
-    homeViewModel: HomeViewModel,
-    modifier: Modifier = Modifier
-) {
-    Column() {
-        HeadingAndCarousel(
-            showList = homeViewModel.trendingShows.value.collectAsLazyPagingItems(),
-            title = stringResource(id = R.string.title_top_rated),
-            modifier = modifier
-        )
-        HeadingAndCarousel(
-            showList = homeViewModel.popularShows.value.collectAsLazyPagingItems(),
-            title = stringResource(id = R.string.title_popular),
-            modifier = modifier
-        )
-        HeadingAndCarousel(
-            showList = homeViewModel.topRatedShows.value.collectAsLazyPagingItems(),
-            title = stringResource(id = R.string.title_popular),
-            modifier = modifier
-        )
-        HeadingAndCarousel(
-            showList = homeViewModel.nowPlayingShows.value.collectAsLazyPagingItems(),
-            title = stringResource(id = R.string.title_popular),
-            modifier = modifier
-        )
-        if (homeViewModel.selectedShowType.value == ShowType.MOVIE) {
-            HeadingAndCarousel(
-                showList = homeViewModel.upcomingMovies.value.collectAsLazyPagingItems(),
-                title = stringResource(id = R.string.title_popular),
-                modifier = modifier
-            )
-        }
     }
 }
 
@@ -128,7 +92,7 @@ fun GenreList(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 4.dp),
+            .padding(vertical = 4.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text(
@@ -143,17 +107,62 @@ fun GenreList(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             itemsIndexed(viewModel.genres) { index, genre ->
-                if (index == 0) {
-                    Chip(selected = true, text = genre.name, onClick = {})
-                } else {
-                    Chip(selected = false, text = genre.name, onClick = {})
+                when (index) {
+                    0 -> Chip(
+                        selected = true,
+                        text = genre.name,
+                        onClick = {},
+                        modifier = modifier.padding(start = 16.dp)
+                    )
+                    viewModel.genres.size - 1 -> Chip(
+                        selected = true,
+                        text = genre.name,
+                        onClick = {},
+                        modifier = modifier.padding(end = 16.dp)
+                    )
+                    else -> Chip(selected = false, text = genre.name, onClick = {})
                 }
             }
         }
     }
 }
 
-@OptIn(ExperimentalGlideComposeApi::class)
+@Composable
+fun ShowList(
+    homeViewModel: HomeViewModel,
+    modifier: Modifier = Modifier
+) {
+    Column {
+        HeadingAndCarousel(
+            showList = homeViewModel.trendingShows.value.collectAsLazyPagingItems(),
+            title = stringResource(id = R.string.title_top_rated),
+            modifier = modifier
+        )
+        HeadingAndCarousel(
+            showList = homeViewModel.topRatedShows.value.collectAsLazyPagingItems(),
+            title = stringResource(id = R.string.title_top_rated),
+            modifier = modifier
+        )
+        HeadingAndCarousel(
+            showList = homeViewModel.popularShows.value.collectAsLazyPagingItems(),
+            title = stringResource(id = R.string.title_popular),
+            modifier = modifier
+        )
+        HeadingAndCarousel(
+            showList = homeViewModel.nowPlayingShows.value.collectAsLazyPagingItems(),
+            title = stringResource(id = R.string.title_now_playing),
+            modifier = modifier
+        )
+        if (homeViewModel.selectedShowType.value == ShowType.MOVIE) {
+            HeadingAndCarousel(
+                showList = homeViewModel.upcomingMovies.value.collectAsLazyPagingItems(),
+                title = stringResource(id = R.string.title_upcoming),
+                modifier = modifier
+            )
+        }
+    }
+}
+
 @Composable
 fun HeadingAndCarousel(
     showList: LazyPagingItems<Show>,
@@ -169,17 +178,16 @@ fun HeadingAndCarousel(
         Spacer(modifier = modifier.height(12.dp))
         when (showList.loadState.refresh) {
             is LoadState.NotLoading -> {
-                LazyRow {
+                LazyRow(modifier = modifier.fillMaxWidth()) {
                     items(showList) { show ->
                         show?.let {
-                            Log.d("Eun", "show: " + it.title)
                             val imagePath = "$BASE_POSTER_IMAGE_URL${it.posterPath}"
-                            GlideImage(
+                            AsyncImage(
                                 model = imagePath,
-                                contentDescription = "movie",
+                                contentDescription = "Show",
                                 modifier = modifier
-                                    .width(160.dp)
-                                    .height(300.dp),
+                                    .width(150.dp)
+                                    .height(200.dp)
                             )
                         }
                     }

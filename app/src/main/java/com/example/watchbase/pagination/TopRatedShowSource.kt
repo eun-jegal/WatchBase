@@ -18,9 +18,9 @@ class TopRatedShowSource(
         return try {
             val nextPage = params.key ?: 1
             val showList = if (showType == ShowType.TV_SHOW) {
-                remoteDataSource.getTopRatedTvShows()
+                remoteDataSource.getTopRatedTvShows(page = nextPage)
             } else {
-                remoteDataSource.getTopRatedMovies()
+                remoteDataSource.getTopRatedMovies(page = nextPage)
             }
 
             LoadResult.Page(

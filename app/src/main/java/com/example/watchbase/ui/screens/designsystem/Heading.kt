@@ -10,5 +10,5 @@ import androidx.compose.ui.unit.sp
 fun Heading(
     title: String
 ) {
-    Text(text = title, fontSize = 20.sp, fontWeight = FontWeight.Medium, color = Color.White)
+    Text(text = title, fontSize = 18.sp, fontWeight = FontWeight.Medium, color = Color.White)
 }

@@ -18,9 +18,9 @@ class NowPlayingShowSource(
         return try {
             val nextPage = params.key ?: 1
             val showList = if (showType == ShowType.TV_SHOW) {
-                remoteDataSource.getNowPlayingTvShows()
+                remoteDataSource.getNowPlayingTvShows(page = nextPage)
             } else {
-                remoteDataSource.getNowPlayingMovies()
+                remoteDataSource.getNowPlayingMovies(page = nextPage)
             }
 
             LoadResult.Page(

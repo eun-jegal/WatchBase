@@ -1,5 +1,6 @@
 package com.example.watchbase.pagination
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.watchbase.data.model.Show
@@ -18,9 +19,9 @@ class TrendingShowSource(
         return try {
             val nextPage = params.key ?: 1
             val showList = if (showType == ShowType.TV_SHOW) {
-                remoteDataSource.getTrendingTvShows()
+                remoteDataSource.getTrendingTvShows(page = nextPage)
             } else {
-                remoteDataSource.getTrendingMovies()
+                remoteDataSource.getTrendingMovies(page = nextPage)
             }
 
             LoadResult.Page(

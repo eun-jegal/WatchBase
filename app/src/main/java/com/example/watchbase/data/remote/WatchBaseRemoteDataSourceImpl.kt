@@ -7,44 +7,44 @@ import com.example.watchbase.data.model.ShowList
 class WatchBaseRemoteDataSourceImpl(
     private val tmdbService: TMDBService
 ) : WatchBaseRemoteDataSource {
-    override suspend fun getTopRatedTvShows(): ShowList {
-        return tmdbService.getTopRatedTvShows()
+    override suspend fun getTopRatedTvShows(page: Int): ShowList {
+        return tmdbService.getTopRatedTvShows(page = page)
     }
 
-    override suspend fun getPopularTvShows(): ShowList {
-        return tmdbService.getPopularTvShows()
+    override suspend fun getPopularTvShows(page: Int): ShowList {
+        return tmdbService.getPopularTvShows(page = page)
     }
 
-    override suspend fun getTrendingTvShows(): ShowList {
-        return tmdbService.getTrendingTvShows()
+    override suspend fun getTrendingTvShows(page: Int): ShowList {
+        return tmdbService.getTrendingTvShows(page = page)
     }
 
-    override suspend fun getNowPlayingTvShows(): ShowList {
-        return tmdbService.getNowPlayingTvShows()
+    override suspend fun getNowPlayingTvShows(page: Int): ShowList {
+        return tmdbService.getNowPlayingTvShows(page = page)
     }
 
     override suspend fun getTvShowGenres(): GenreList {
         return tmdbService.getTvShowGenres()
     }
 
-    override suspend fun getTopRatedMovies(): ShowList {
-        return tmdbService.getTopRatedMovies()
+    override suspend fun getTopRatedMovies(page: Int): ShowList {
+        return tmdbService.getTopRatedMovies(page = page)
     }
 
-    override suspend fun getPopularMovies(): ShowList {
-        return tmdbService.getPopularMovies()
+    override suspend fun getPopularMovies(page: Int): ShowList {
+        return tmdbService.getPopularMovies(page = page)
     }
 
-    override suspend fun getTrendingMovies(): ShowList {
-        return tmdbService.getTrendingMovies()
+    override suspend fun getTrendingMovies(page: Int): ShowList {
+        return tmdbService.getTrendingMovies(page = page)
     }
 
-    override suspend fun getNowPlayingMovies(): ShowList {
-        return tmdbService.getNowPlayingMovies()
+    override suspend fun getNowPlayingMovies(page: Int): ShowList {
+        return tmdbService.getNowPlayingMovies(page = page)
     }
 
-    override suspend fun getUpcomingMovies(): ShowList {
-        return tmdbService.getUpcomingMovies()
+    override suspend fun getUpcomingMovies(page: Int): ShowList {
+        return tmdbService.getUpcomingMovies(page = page)
     }
 
     override suspend fun getMovieGenres(): GenreList {

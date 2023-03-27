@@ -16,10 +16,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class NetModule {
 
-    private val client: OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
-        .build()
-
     @Singleton
     @Provides
     fun provideTMDBService(retrofit: Retrofit): TMDBService {
@@ -28,11 +24,18 @@ class NetModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit(): Retrofit {
+    fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(BuildConfig.BASE_URL)
-            .client(client)
+            .build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
             .build()
     }
 }

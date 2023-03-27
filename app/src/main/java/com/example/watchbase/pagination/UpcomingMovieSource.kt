@@ -15,7 +15,7 @@ class UpcomingMovieSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Show> {
         return try {
             val nextPage = params.key ?: 1
-            val showList = remoteDataSource.getUpcomingMovies()
+            val showList = remoteDataSource.getUpcomingMovies(page = nextPage)
 
             LoadResult.Page(
                 data = showList.results,

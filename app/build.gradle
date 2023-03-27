@@ -7,6 +7,10 @@ plugins {
     id 'kotlin-kapt'
 }
 
+def localPropertiesFile = rootProject.file("local.properties")
+def localProperties = new Properties()
+localProperties.load(new FileInputStream(localPropertiesFile))
+
 android {
     compileSdk 32
 
@@ -16,6 +20,9 @@ android {
         targetSdk 32
         versionCode 1
         versionName "1.0"
+
+        buildConfigField("String", "BASE_URL", localProperties['BASE_URL'])
+        buildConfigField("String", "API_KEY", localProperties['API_KEY'])
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -53,7 +60,7 @@ dependencies {
 
     def nav_version = "2.5.3"
     implementation "androidx.navigation:navigation-compose:$nav_version"
-
+    implementation "io.coil-kt:coil-compose:2.2.2"
     implementation "com.github.bumptech.glide:compose:1.0.0-alpha.1"
     // Pagination
     implementation "androidx.paging:paging-compose:1.0.0-alpha15"
