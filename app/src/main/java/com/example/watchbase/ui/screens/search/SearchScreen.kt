@@ -1,4 +1,4 @@
-package com.example.watchbase.ui.screens
+package com.example.watchbase.ui.screens.search
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -17,7 +17,7 @@ import com.example.watchbase.R
 import com.example.watchbase.ui.screens.designsystem.Heading
 
 @Composable
-fun Search(modifier: Modifier = Modifier) {
+fun SearchScreen(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()

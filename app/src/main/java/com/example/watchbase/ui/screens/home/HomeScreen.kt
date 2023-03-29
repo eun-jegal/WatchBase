@@ -29,8 +29,9 @@ import com.example.watchbase.ui.viewmodel.HomeViewModel
 const val BASE_POSTER_IMAGE_URL = "https://image.tmdb.org/t/p/w500/"
 
 @Composable
-fun Home(
+fun HomeScreen(
     homeViewModel: HomeViewModel,
+    onNavigateToGenreScreen: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -39,7 +40,11 @@ fun Home(
             .padding(top = 8.dp)
             .verticalScroll(rememberScrollState())
     ) {
-        SelectionChips(homeViewModel = homeViewModel, modifier = modifier)
+        SelectionChips(
+            homeViewModel = homeViewModel,
+            onNavigateToGenreScreen = onNavigateToGenreScreen,
+            modifier = modifier
+        )
         ShowList(homeViewModel = homeViewModel, modifier = modifier)
     }
 }
@@ -47,6 +52,7 @@ fun Home(
 @Composable
 fun SelectionChips(
     homeViewModel: HomeViewModel,
+    onNavigateToGenreScreen: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -73,7 +79,7 @@ fun SelectionChips(
         }
         DropDownMenu(
             text = homeViewModel.selectedGenre.value.name,
-            onClick = { }
+            onClick = { onNavigateToGenreScreen() }
         )
     }
 }
