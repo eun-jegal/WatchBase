@@ -1,7 +1,6 @@
 package com.example.watchbase.ui.screens.designsystem
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
@@ -17,28 +16,18 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun Chip(
-    selected: Boolean,
+fun DropDownMenu(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Surface(
-        color = when {
-            selected -> MaterialTheme.colors.onSurface
-            else -> Color.Transparent
-        },
-        contentColor = when {
-            selected -> MaterialTheme.colors.onPrimary
-            else -> Color.LightGray
-        },
+        color = Color.Transparent,
+        contentColor = Color.LightGray,
         shape = CircleShape,
         border = BorderStroke(
             width = 1.dp,
-            color = when {
-                selected -> MaterialTheme.colors.primary
-                else -> Color.LightGray
-            }
+            color = Color.LightGray
         ),
         modifier = modifier,
         onClick = { onClick() }
@@ -50,7 +39,12 @@ fun Chip(
                 text = text,
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.body2,
-                modifier = modifier.padding(8.dp)
+                modifier = modifier.padding(start = 8.dp, top = 8.dp, bottom = 8.dp)
+            )
+            Icon(
+                imageVector = Icons.Default.ArrowDropDown,
+                contentDescription = "Drop down",
+                modifier = modifier.padding(end = 4.dp)
             )
         }
     }
