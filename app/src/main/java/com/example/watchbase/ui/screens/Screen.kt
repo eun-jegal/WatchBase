@@ -9,4 +9,5 @@ sealed class Screen(val route: String, @DrawableRes val iconId: Int, @StringRes 
     object Search : Screen("search", R.drawable.ic_baseline_search_24, R.string.search)
     object MyList : Screen("myList", R.drawable.ic_baseline_video_library_24, R.string.my_list)
     object Genres : Screen("genres", -1, R.string.genres)
+    object Detail : Screen("detail", -1, R.string.detail)
 }

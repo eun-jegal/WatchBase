@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.watchbase.ui.screens.designsystem.BackButton
 import com.example.watchbase.ui.viewmodel.HomeViewModel
 
 @Composable
@@ -29,19 +30,7 @@ fun GenreScreen(
             .fillMaxSize()
             .padding(horizontal = 16.dp)
     ) {
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .height(56.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End
-        ) {
-            Icon(
-                imageVector = Icons.Default.Close,
-                tint = Color.White,
-                contentDescription = "close",
-                modifier = modifier.clickable { onNavigateToHomeScreen() })
-        }
+        BackButton(onNavigateUp = { onNavigateToHomeScreen() }, modifier = modifier)
         LazyColumn(
             modifier = modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(24.dp)

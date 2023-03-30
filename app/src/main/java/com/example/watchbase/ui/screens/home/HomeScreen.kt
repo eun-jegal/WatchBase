@@ -1,12 +1,12 @@
 package com.example.watchbase.ui.screens.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -18,7 +18,6 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import coil.compose.AsyncImage
 import com.example.watchbase.R
-import com.example.watchbase.data.model.Genre
 import com.example.watchbase.data.model.Show
 import com.example.watchbase.data.model.ShowType
 import com.example.watchbase.ui.screens.designsystem.Chip
@@ -32,31 +31,32 @@ const val BASE_POSTER_IMAGE_URL = "https://image.tmdb.org/t/p/w500/"
 fun HomeScreen(
     homeViewModel: HomeViewModel,
     onNavigateToGenreScreen: () -> Unit,
-    modifier: Modifier = Modifier
+    onNavigateToDetailScreen: (Int, String) -> Unit
 ) {
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .padding(top = 8.dp)
             .verticalScroll(rememberScrollState())
     ) {
         SelectionChips(
             homeViewModel = homeViewModel,
-            onNavigateToGenreScreen = onNavigateToGenreScreen,
-            modifier = modifier
+            onNavigateToGenreScreen = onNavigateToGenreScreen
         )
-        ShowList(homeViewModel = homeViewModel, modifier = modifier)
+        ShowList(
+            homeViewModel = homeViewModel,
+            onNavigateToDetailScreen = onNavigateToDetailScreen
+        )
     }
 }
 
 @Composable
 fun SelectionChips(
     homeViewModel: HomeViewModel,
-    onNavigateToGenreScreen: () -> Unit,
-    modifier: Modifier = Modifier
+    onNavigateToGenreScreen: () -> Unit
 ) {
     Row(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 2.dp, horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -87,34 +87,39 @@ fun SelectionChips(
 @Composable
 fun ShowList(
     homeViewModel: HomeViewModel,
-    modifier: Modifier = Modifier
+    onNavigateToDetailScreen: (Int, String) -> Unit
 ) {
     Column {
         HeadingAndCarousel(
             showList = homeViewModel.trendingShows.value.collectAsLazyPagingItems(),
-            title = stringResource(id = R.string.title_trending),
-            modifier = modifier
+            showType = homeViewModel.selectedShowType.value,
+            onNavigateToDetailScreen = onNavigateToDetailScreen,
+            title = stringResource(id = R.string.title_trending)
         )
         HeadingAndCarousel(
             showList = homeViewModel.topRatedShows.value.collectAsLazyPagingItems(),
-            title = stringResource(id = R.string.title_top_rated),
-            modifier = modifier
+            showType = homeViewModel.selectedShowType.value,
+            onNavigateToDetailScreen = onNavigateToDetailScreen,
+            title = stringResource(id = R.string.title_top_rated)
         )
         HeadingAndCarousel(
             showList = homeViewModel.popularShows.value.collectAsLazyPagingItems(),
-            title = stringResource(id = R.string.title_popular),
-            modifier = modifier
+            showType = homeViewModel.selectedShowType.value,
+            onNavigateToDetailScreen = onNavigateToDetailScreen,
+            title = stringResource(id = R.string.title_popular)
         )
         HeadingAndCarousel(
             showList = homeViewModel.nowPlayingShows.value.collectAsLazyPagingItems(),
-            title = stringResource(id = R.string.title_now_playing),
-            modifier = modifier
+            showType = homeViewModel.selectedShowType.value,
+            onNavigateToDetailScreen = onNavigateToDetailScreen,
+            title = stringResource(id = R.string.title_now_playing)
         )
         if (homeViewModel.selectedShowType.value == ShowType.MOVIE) {
             HeadingAndCarousel(
                 showList = homeViewModel.upcomingMovies.value.collectAsLazyPagingItems(),
-                title = stringResource(id = R.string.title_upcoming),
-                modifier = modifier
+                showType = homeViewModel.selectedShowType.value,
+                onNavigateToDetailScreen = onNavigateToDetailScreen,
+                title = stringResource(id = R.string.title_upcoming)
             )
         }
     }
@@ -123,20 +128,21 @@ fun ShowList(
 @Composable
 fun HeadingAndCarousel(
     showList: LazyPagingItems<Show>,
-    title: String,
-    modifier: Modifier
+    showType: ShowType,
+    onNavigateToDetailScreen: (Int, String) -> Unit,
+    title: String
 ) {
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
     ) {
         Heading(title = title)
-        Spacer(modifier = modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(12.dp))
         when (showList.loadState.refresh) {
             is LoadState.NotLoading -> {
                 LazyRow(
-                    modifier = modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     items(showList) { show ->
                         show?.let {
@@ -144,10 +150,13 @@ fun HeadingAndCarousel(
                             AsyncImage(
                                 model = imagePath,
                                 contentDescription = "Show",
-                                modifier = modifier
+                                modifier = Modifier
                                     .clip(RoundedCornerShape(12.dp))
                                     .width(150.dp)
                                     .height(200.dp)
+                                    .clickable {
+                                        onNavigateToDetailScreen(show.id, showType.toString())
+                                    }
                             )
                         }
                     }
