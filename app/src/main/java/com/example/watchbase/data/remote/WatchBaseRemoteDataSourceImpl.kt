@@ -1,8 +1,11 @@
 package com.example.watchbase.data.remote
 
 import com.example.watchbase.data.model.GenreList
+import com.example.watchbase.data.model.Show
 import com.example.watchbase.data.remote.api.TMDBService
 import com.example.watchbase.data.model.ShowList
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class WatchBaseRemoteDataSourceImpl(
     private val tmdbService: TMDBService
@@ -27,6 +30,12 @@ class WatchBaseRemoteDataSourceImpl(
         return tmdbService.getTvShowGenres()
     }
 
+    override suspend fun getTvShowDetails(showId: Int): Flow<Show> {
+        return flow {
+            emit(tmdbService.getTvShowDetails(showId))
+        }
+    }
+
     override suspend fun getTopRatedMovies(page: Int): ShowList {
         return tmdbService.getTopRatedMovies(page = page)
     }
@@ -49,5 +58,11 @@ class WatchBaseRemoteDataSourceImpl(
 
     override suspend fun getMovieGenres(): GenreList {
         return tmdbService.getMovieGenres()
+    }
+
+    override suspend fun getMovieDetails(showId: Int): Flow<Show> {
+        return flow {
+            emit(tmdbService.getMovieDetails(showId))
+        }
     }
 }

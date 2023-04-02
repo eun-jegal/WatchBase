@@ -8,6 +8,7 @@ import com.example.watchbase.data.model.ShowType
 import com.example.watchbase.data.remote.WatchBaseRemoteDataSource
 import com.example.watchbase.pagination.*
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 class ShowRepositoryImpl(
     private val remoteDataSource: WatchBaseRemoteDataSource
@@ -55,6 +56,14 @@ class ShowRepositoryImpl(
                 UpcomingMovieSource(remoteDataSource)
             }
         ).flow
+    }
+
+    override suspend fun getShowDetails(showId: Int, showType: ShowType): Flow<Show> {
+        return if (showType == ShowType.TV_SHOW) {
+            remoteDataSource.getTvShowDetails(showId)
+        } else {
+            remoteDataSource.getMovieDetails(showId)
+        }
     }
 
 }

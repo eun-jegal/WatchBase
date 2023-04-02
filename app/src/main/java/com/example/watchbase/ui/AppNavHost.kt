@@ -6,13 +6,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
 import com.example.watchbase.R
-import com.example.watchbase.data.model.Show
-import com.example.watchbase.ui.navigation.ShowNavType
+import com.example.watchbase.ui.screens.DetailScreen
 import com.example.watchbase.ui.screens.Screen
 import com.example.watchbase.ui.screens.home.GenreScreen
 import com.example.watchbase.ui.screens.home.HomeScreen
@@ -37,8 +34,9 @@ fun AppNavHost(
                 HomeScreen(
                     homeViewModel = homeViewModel,
                     onNavigateToGenreScreen = { navController.navigate(Screen.Genres.route) },
-                    onNavigateToDetailScreen = { showId, showType ->
-                        navController.navigate("${Screen.Detail.route}/$showId/$showType")
+                    onNavigateToDetailScreen = {
+                        homeViewModel.selectedShow.value = it
+                        navController.navigate(Screen.Detail.route)
                     }
                 )
             }
@@ -55,16 +53,12 @@ fun AppNavHost(
             composable(Screen.MyList.route) {
                 MyListScreen()
             }
-            composable(route = "${Screen.Detail.route}/{selected_show_id}/{show_type}",
-                arguments = listOf(
-                    navArgument("selected_show_id") {
-                        type = NavType.StringType
-                    },
-                    navArgument("show_type") {
-                        type = NavType.StringType
-                    }
-                )) {
-
+            composable(Screen.Detail.route) {
+                DetailScreen(
+                    selectedShow = homeViewModel.selectedShow,
+                    onClickAddToMyList = { /*TODO*/ }) {
+                    navController.navigate(Screen.Home.route)
+                }
             }
         })
 }

@@ -28,6 +28,7 @@ class HomeViewModel(
 ) : ViewModel() {
     var selectedGenre: MutableState<Genre> = mutableStateOf(Genre(null, "Genre"))
     var selectedShowType: MutableState<ShowType> = mutableStateOf(ShowType.TV_SHOW)
+    var selectedShow: MutableState<Show?> = mutableStateOf(null)
 
     private val _genres = mutableStateListOf<Genre>()
     val genres: SnapshotStateList<Genre> = _genres

@@ -12,4 +12,5 @@ interface ShowRepository {
     suspend fun getTrendingShows(showType: ShowType): Flow<PagingData<Show>>
     suspend fun getNowPlayingShows(showType: ShowType): Flow<PagingData<Show>>
     suspend fun getUpcomingMovies(): Flow<PagingData<Show>>
+    suspend fun getShowDetails(showId: Int, showType: ShowType): Flow<Show>
 }

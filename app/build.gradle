@@ -24,6 +24,8 @@ android {
 
         buildConfigField("String", "BASE_URL", localProperties['BASE_URL'])
         buildConfigField("String", "API_KEY", localProperties['API_KEY'])
+        buildConfigField("String", "BASE_POSTER_IMAGE_URL", localProperties['BASE_POSTER_IMAGE_URL'])
+        buildConfigField("String", "BASE_BACKDROP_IMAGE_URL", localProperties['BASE_BACKDROP_IMAGE_URL'])
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

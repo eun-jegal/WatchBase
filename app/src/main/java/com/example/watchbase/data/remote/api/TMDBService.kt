@@ -2,8 +2,11 @@ package com.example.watchbase.data.remote.api
 
 import com.example.watchbase.BuildConfig
 import com.example.watchbase.data.model.GenreList
+import com.example.watchbase.data.model.Show
 import com.example.watchbase.data.model.ShowList
+import kotlinx.coroutines.flow.Flow
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface TMDBService {
@@ -55,6 +58,16 @@ interface TMDBService {
         @Query("api_key")
         apiKey: String = BuildConfig.API_KEY
     ): GenreList
+
+    @GET("tv/{tv_id}")
+    suspend fun getTvShowDetails(
+        @Path("tv_id")
+        show_id: Int,
+        @Query("language")
+        language: String = "en",
+        @Query("api_key")
+        apiKey: String = BuildConfig.API_KEY
+    ): Show
 
     // Movies
     @GET("movie/top_rated")
@@ -115,4 +128,13 @@ interface TMDBService {
         apiKey: String = BuildConfig.API_KEY
     ): GenreList
 
+    @GET("movie/{movie_id}")
+    suspend fun getMovieDetails(
+        @Path("movie_id")
+        movie_id: Int,
+        @Query("language")
+        language: String = "en",
+        @Query("api_key")
+        apiKey: String = BuildConfig.API_KEY
+    ): Show
 }

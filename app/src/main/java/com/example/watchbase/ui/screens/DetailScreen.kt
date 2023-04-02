@@ -1,112 +1,160 @@
 package com.example.watchbase.ui.screens
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.watchbase.BuildConfig
+import com.example.watchbase.R
 import com.example.watchbase.data.model.Show
+import com.example.watchbase.ui.screens.designsystem.ActionButton
 import com.example.watchbase.ui.screens.designsystem.BackButton
-import com.example.watchbase.ui.screens.home.BASE_POSTER_IMAGE_URL
+import com.example.watchbase.ui.viewmodel.HomeViewModel
 
 @Composable
 fun DetailScreen(
-    currentShow: Show,
+    selectedShow: MutableState<Show?>,
+    onClickAddToMyList: () -> Unit,
     onNavigateToHomeScreen: () -> Unit
 ) {
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
     ) {
-        BackButton(onNavigateUp = { onNavigateToHomeScreen() })
-        Poster(currentShow = currentShow)
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp)
-        ) {
-            Title(currentShow = currentShow)
-            ShowDetails(currentShow = currentShow)
-            AddToMyListButton(currentShow = currentShow)
-            Plot(currentShow = currentShow)
-            Casts(currentShow = currentShow)
-            SimilarMovies(currentShow = currentShow)
+        selectedShow.value?.let {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.32f),
+                contentAlignment = Alignment.TopStart
+            ) {
+                Poster(posterPath = it.backdropPath)
+                BackButton(onNavigateUp = { onNavigateToHomeScreen() })
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp)
+            ) {
+                Title(showTitle = it.title)
+
+                ShowDetails(selectedShow = it)
+                Spacer(modifier = Modifier.height(8.dp))
+
+                ActionButtons(onClickAddToMyList = onClickAddToMyList, onClickLikeShow = {})
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Overview(overview = it.overview)
+                Spacer(modifier = Modifier.height(16.dp))
+
+//            Casts(homeViewModel = homeViewModel)
+//            SimilarMovies(homeViewModel = homeViewModel)
+            }
         }
     }
 }
 
 @Composable
-fun Poster(currentShow: Show) {
-    val imagePath = "$BASE_POSTER_IMAGE_URL${currentShow.posterPath}"
-    AsyncImage(
-        model = imagePath,
-        contentDescription = "Show",
-        modifier = Modifier
-            .clip(RoundedCornerShape(12.dp))
-            .fillMaxWidth()
-            .fillMaxHeight(0.3f)
-    )
-}
-
-@Composable
-fun Title(currentShow: Show) {
-    Text(
-        text = currentShow.title,
-        color = Color.White,
-        fontSize = 18.sp,
-        fontWeight = FontWeight.SemiBold
-    )
-}
-
-@Composable
-fun ShowDetails(currentShow: Show) {
-    Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-        Text(text = currentShow.voteAverage.toString(), fontSize = 14.sp)
-        Text(text = "|", fontSize = 14.sp)
-        Text(text = currentShow.releaseDate, fontSize = 14.sp)
-        Text(text = "|", fontSize = 14.sp)
-        Text(text = currentShow.runtime.toString(), fontSize = 14.sp)
-        //TODO: Genres
+fun Poster(posterPath: String?) {
+    posterPath?.let {
+        AsyncImage(
+            model = "${BuildConfig.BASE_BACKDROP_IMAGE_URL}$it",
+            contentDescription = "Show",
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+        )
     }
 }
 
 @Composable
-fun AddToMyListButton(currentShow: Show) {
+fun Title(showTitle: String) {
+    Text(
+        text = showTitle,
+        color = Color.White,
+        fontSize = 22.sp,
+        fontWeight = FontWeight.Medium
+    )
+}
+
+@Composable
+fun ShowDetails(selectedShow: Show) {
+    Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+        Text(
+            text = "★${selectedShow.voteAverage}",
+            fontSize = 14.sp,
+            color = colorResource(id = R.color.text_color_secondary)
+        )
+        Text(
+            text = " · ${selectedShow.releaseDate}", fontSize = 14.sp,
+            color = colorResource(id = R.color.text_color_secondary)
+        )
+        selectedShow.runtime?.let {
+            Text(
+                text = " · $it", fontSize = 14.sp,
+                color = colorResource(id = R.color.text_color_secondary)
+            )
+        }
+    }
+}
+
+@Composable
+fun ActionButtons(
+    onClickAddToMyList: () -> Unit,
+    onClickLikeShow: () -> Unit,
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(32.dp)
-            .clickable { },
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
+            .height(36.dp)
     ) {
-        Icon(imageVector = Icons.Default.Add, contentDescription = "add")
-        Text(text = "Add to My List", color = Color.White, fontWeight = FontWeight.Medium)
+        ActionButton(imageVector = Icons.Default.Add, label = "MY LIST", modifier = Modifier
+            .weight(1f)
+            .fillMaxHeight()
+            .border(width = 1.dp, color = Color.White, shape = RoundedCornerShape(4.dp))
+            .clickable { onClickAddToMyList() })
+        Spacer(modifier = Modifier.width(8.dp))
+        ActionButton(imageVector = Icons.Default.FavoriteBorder, label = "LIKE", modifier = Modifier
+            .weight(1f)
+            .fillMaxHeight()
+            .border(width = 1.dp, color = Color.White, shape = RoundedCornerShape(4.dp))
+            .clickable { onClickLikeShow() })
     }
 }
 
 @Composable
-fun Plot(currentShow: Show) {
-    Text(text = currentShow.overview)
+fun Overview(overview: String) {
+    Text(text = overview, color = colorResource(id = R.color.text_color_secondary))
 }
 
 @Composable
-fun Casts(currentShow: Show) {
+fun Casts(
+    homeViewModel: HomeViewModel
+) {
     //ToDo : Casts list
 }
 
 @Composable
-fun SimilarMovies(currentShow: Show) {
+fun SimilarMovies(
+    homeViewModel: HomeViewModel
+) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(text = "Similar Movies")
         //ToDo : Movies list

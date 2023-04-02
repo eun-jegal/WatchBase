@@ -17,6 +17,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import coil.compose.AsyncImage
+import com.example.watchbase.BuildConfig
 import com.example.watchbase.R
 import com.example.watchbase.data.model.Show
 import com.example.watchbase.data.model.ShowType
@@ -25,13 +26,11 @@ import com.example.watchbase.ui.screens.designsystem.DropDownMenu
 import com.example.watchbase.ui.screens.designsystem.Heading
 import com.example.watchbase.ui.viewmodel.HomeViewModel
 
-const val BASE_POSTER_IMAGE_URL = "https://image.tmdb.org/t/p/w500/"
-
 @Composable
 fun HomeScreen(
     homeViewModel: HomeViewModel,
     onNavigateToGenreScreen: () -> Unit,
-    onNavigateToDetailScreen: (Int, String) -> Unit
+    onNavigateToDetailScreen: (Show) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -87,37 +86,32 @@ fun SelectionChips(
 @Composable
 fun ShowList(
     homeViewModel: HomeViewModel,
-    onNavigateToDetailScreen: (Int, String) -> Unit
+    onNavigateToDetailScreen: (Show) -> Unit
 ) {
     Column {
         HeadingAndCarousel(
             showList = homeViewModel.trendingShows.value.collectAsLazyPagingItems(),
-            showType = homeViewModel.selectedShowType.value,
             onNavigateToDetailScreen = onNavigateToDetailScreen,
             title = stringResource(id = R.string.title_trending)
         )
         HeadingAndCarousel(
             showList = homeViewModel.topRatedShows.value.collectAsLazyPagingItems(),
-            showType = homeViewModel.selectedShowType.value,
             onNavigateToDetailScreen = onNavigateToDetailScreen,
             title = stringResource(id = R.string.title_top_rated)
         )
         HeadingAndCarousel(
             showList = homeViewModel.popularShows.value.collectAsLazyPagingItems(),
-            showType = homeViewModel.selectedShowType.value,
             onNavigateToDetailScreen = onNavigateToDetailScreen,
             title = stringResource(id = R.string.title_popular)
         )
         HeadingAndCarousel(
             showList = homeViewModel.nowPlayingShows.value.collectAsLazyPagingItems(),
-            showType = homeViewModel.selectedShowType.value,
             onNavigateToDetailScreen = onNavigateToDetailScreen,
             title = stringResource(id = R.string.title_now_playing)
         )
         if (homeViewModel.selectedShowType.value == ShowType.MOVIE) {
             HeadingAndCarousel(
                 showList = homeViewModel.upcomingMovies.value.collectAsLazyPagingItems(),
-                showType = homeViewModel.selectedShowType.value,
                 onNavigateToDetailScreen = onNavigateToDetailScreen,
                 title = stringResource(id = R.string.title_upcoming)
             )
@@ -128,8 +122,7 @@ fun ShowList(
 @Composable
 fun HeadingAndCarousel(
     showList: LazyPagingItems<Show>,
-    showType: ShowType,
-    onNavigateToDetailScreen: (Int, String) -> Unit,
+    onNavigateToDetailScreen: (Show) -> Unit,
     title: String
 ) {
     Column(
@@ -146,7 +139,7 @@ fun HeadingAndCarousel(
                 ) {
                     items(showList) { show ->
                         show?.let {
-                            val imagePath = "$BASE_POSTER_IMAGE_URL${it.posterPath}"
+                            val imagePath = "${BuildConfig.BASE_POSTER_IMAGE_URL}${it.posterPath}"
                             AsyncImage(
                                 model = imagePath,
                                 contentDescription = "Show",
@@ -155,7 +148,7 @@ fun HeadingAndCarousel(
                                     .width(150.dp)
                                     .height(200.dp)
                                     .clickable {
-                                        onNavigateToDetailScreen(show.id, showType.toString())
+                                        onNavigateToDetailScreen(it)
                                     }
                             )
                         }
