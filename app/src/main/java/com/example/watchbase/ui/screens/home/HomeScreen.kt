@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
@@ -142,11 +143,11 @@ fun HeadingAndCarousel(
                             val imagePath = "${BuildConfig.BASE_POSTER_IMAGE_URL}${it.posterPath}"
                             AsyncImage(
                                 model = imagePath,
+                                contentScale = ContentScale.FillHeight,
                                 contentDescription = "Show",
                                 modifier = Modifier
-                                    .clip(RoundedCornerShape(12.dp))
+                                    .clip(RoundedCornerShape(8.dp))
                                     .width(150.dp)
-                                    .height(200.dp)
                                     .clickable {
                                         onNavigateToDetailScreen(it)
                                     }

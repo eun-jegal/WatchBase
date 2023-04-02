@@ -3,25 +3,40 @@ package com.example.watchbase.ui.screens
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.items
 import coil.compose.AsyncImage
 import com.example.watchbase.BuildConfig
 import com.example.watchbase.R
+import com.example.watchbase.data.model.Cast
 import com.example.watchbase.data.model.Show
 import com.example.watchbase.ui.screens.designsystem.ActionButton
 import com.example.watchbase.ui.screens.designsystem.BackButton
+import com.example.watchbase.ui.screens.designsystem.Heading
 import com.example.watchbase.ui.viewmodel.DetailViewModel
 import com.example.watchbase.ui.viewmodel.HomeViewModel
 
@@ -32,16 +47,24 @@ fun DetailScreen(
     onClickAddToMyList: () -> Unit,
     onNavigateToHomeScreen: () -> Unit
 ) {
+    homeViewModel.selectedShow.value?.let {
+        LaunchedEffect(key1 = it) {
+            detailViewModel.run {
+                getShowCasts(showId = it.id, showType = homeViewModel.selectedShowType.value)
+                getSimilarShows(showId = it.id, showType = homeViewModel.selectedShowType.value)
+            }
+        }
+    }
+
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
     ) {
         homeViewModel.selectedShow.value?.let {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.32f),
+                    .fillMaxWidth(),
                 contentAlignment = Alignment.TopStart
             ) {
                 Poster(posterPath = it.backdropPath)
@@ -50,23 +73,24 @@ fun DetailScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp)
+                modifier = Modifier.padding(horizontal = 16.dp)
             ) {
                 Title(showTitle = it.title)
+                Spacer(modifier = Modifier.height(2.dp))
 
                 ShowDetails(selectedShow = it)
                 Spacer(modifier = Modifier.height(8.dp))
 
-                ActionButtons(onClickAddToMyList = onClickAddToMyList, onClickLikeShow = {})
+                Casts(castList = detailViewModel.cast.value)
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Overview(overview = it.overview)
                 Spacer(modifier = Modifier.height(16.dp))
 
-//            Casts(homeViewModel = homeViewModel)
-//            SimilarMovies(homeViewModel = homeViewModel)
+                ActionButtons(onClickAddToMyList = onClickAddToMyList, onClickLikeShow = {})
+                Spacer(modifier = Modifier.height(16.dp))
+
+                SimilarMovies(showList = detailViewModel.similarShows.value.collectAsLazyPagingItems())
             }
         }
     }
@@ -77,10 +101,10 @@ fun Poster(posterPath: String?) {
     posterPath?.let {
         AsyncImage(
             model = "${BuildConfig.BASE_BACKDROP_IMAGE_URL}$it",
+            contentScale = ContentScale.FillWidth,
             contentDescription = "Show",
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight()
         )
     }
 }
@@ -147,17 +171,77 @@ fun Overview(overview: String) {
 
 @Composable
 fun Casts(
-    homeViewModel: HomeViewModel
+    castList: List<Cast>
 ) {
-    //ToDo : Casts list
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
+        Row(modifier = Modifier.weight(0.7f)) {
+            Text(text = "Casts", fontWeight = FontWeight.Medium, color = Color.White)
+            Spacer(modifier = Modifier.width(8.dp))
+            var castNames = ""
+            castList.forEachIndexed { index, cast ->
+                castNames += when (index) {
+                    castList.size - 1 -> cast.name
+                    else -> "${cast.name}, "
+                }
+            }
+            Text(
+                text = castNames,
+                color = Color.White,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+
+        Row(
+            modifier = Modifier.weight(0.3f),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End
+        ) {
+            Text(text = "View All", fontWeight = FontWeight.Medium, color = Color.White)
+            Spacer(modifier = Modifier.width(2.dp))
+            Icon(
+                imageVector = Icons.Default.KeyboardArrowRight,
+                modifier = Modifier
+                    .width(14.dp)
+                    .height(14.dp),
+                contentDescription = "View All",
+                tint = Color.White
+            )
+        }
+    }
+
 }
 
 @Composable
 fun SimilarMovies(
-    homeViewModel: HomeViewModel
+    showList: LazyPagingItems<Show>
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        Text(text = "Similar Movies")
-        //ToDo : Movies list
+        Heading(title = "More Like This")
+        Spacer(modifier = Modifier.height(12.dp))
+        when (showList.loadState.refresh) {
+            is LoadState.NotLoading -> {
+                LazyRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(showList) { show ->
+                        show?.let {
+                            val imagePath = "${BuildConfig.BASE_POSTER_IMAGE_URL}${it.posterPath}"
+                            AsyncImage(
+                                model = imagePath,
+                                contentScale = ContentScale.FillHeight,
+                                contentDescription = "Show",
+                                modifier = Modifier
+                                    .height(200.dp)
+                                    .clickable {
+
+                                    }
+                            )
+                        }
+                    }
+                }
+            }
+        }
     }
 }

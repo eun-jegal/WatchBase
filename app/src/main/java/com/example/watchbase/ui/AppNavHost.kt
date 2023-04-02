@@ -15,11 +15,13 @@ import com.example.watchbase.ui.screens.home.GenreScreen
 import com.example.watchbase.ui.screens.home.HomeScreen
 import com.example.watchbase.ui.screens.mylist.MyListScreen
 import com.example.watchbase.ui.screens.search.SearchScreen
+import com.example.watchbase.ui.viewmodel.DetailViewModel
 import com.example.watchbase.ui.viewmodel.HomeViewModel
 
 @Composable
 fun AppNavHost(
     homeViewModel: HomeViewModel,
+    detailViewModel: DetailViewModel,
     navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
@@ -55,7 +57,8 @@ fun AppNavHost(
             }
             composable(Screen.Detail.route) {
                 DetailScreen(
-                    selectedShow = homeViewModel.selectedShow,
+                    homeViewModel = homeViewModel,
+                    detailViewModel = detailViewModel,
                     onClickAddToMyList = { /*TODO*/ }) {
                     navController.navigate(Screen.Home.route)
                 }

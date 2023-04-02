@@ -12,7 +12,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.rememberNavController
 import com.example.watchbase.ui.AppNavHost
 import com.example.watchbase.ui.BottomNavBar
+import com.example.watchbase.ui.viewmodel.DetailViewModel
 import com.example.watchbase.ui.viewmodel.HomeViewModel
+import com.example.watchbase.ui.viewmodel.factory.DetailViewModelFactory
 import com.example.watchbase.ui.viewmodel.factory.HomeViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -22,12 +24,17 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var homeViewModelFactory: HomeViewModelFactory
+    @Inject
+    lateinit var detailViewModelFactory: DetailViewModelFactory
+
     private lateinit var homeViewModel: HomeViewModel
+    private lateinit var detailViewModel: DetailViewModel
 
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         homeViewModel = ViewModelProvider(this, homeViewModelFactory)[HomeViewModel::class.java]
+        detailViewModel = ViewModelProvider(this, detailViewModelFactory)[DetailViewModel::class.java]
 
         setContent {
             val navController = rememberNavController()
@@ -37,6 +44,7 @@ class MainActivity : ComponentActivity() {
                 Box(modifier = Modifier.padding(it)) {
                     AppNavHost(
                         homeViewModel = homeViewModel,
+                        detailViewModel = detailViewModel,
                         navController = navController,
                         modifier = Modifier
                     )
