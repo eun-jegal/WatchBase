@@ -1,5 +1,6 @@
 package com.example.watchbase.data.remote
 
+import com.example.watchbase.data.model.CastList
 import com.example.watchbase.data.model.GenreList
 import com.example.watchbase.data.model.Show
 import com.example.watchbase.data.remote.api.TMDBService
@@ -30,10 +31,12 @@ class WatchBaseRemoteDataSourceImpl(
         return tmdbService.getTvShowGenres()
     }
 
-    override suspend fun getTvShowDetails(showId: Int): Flow<Show> {
-        return flow {
-            emit(tmdbService.getTvShowDetails(showId))
-        }
+    override suspend fun getTvShowCasts(showId: Int): CastList {
+        return tmdbService.getTvShowCasts(showId)
+    }
+
+    override suspend fun getSimilarTvShows(showId: Int, page: Int): ShowList {
+        return tmdbService.getSimilarTvShows(showId, page)
     }
 
     override suspend fun getTopRatedMovies(page: Int): ShowList {
@@ -60,9 +63,11 @@ class WatchBaseRemoteDataSourceImpl(
         return tmdbService.getMovieGenres()
     }
 
-    override suspend fun getMovieDetails(showId: Int): Flow<Show> {
-        return flow {
-            emit(tmdbService.getMovieDetails(showId))
-        }
+    override suspend fun getMovieCasts(showId: Int): CastList {
+        return tmdbService.getMovieCasts(showId)
+    }
+
+    override suspend fun getSimilarMovies(showId: Int, page: Int): ShowList {
+        return tmdbService.getSimilarMovies(showId, page)
     }
 }

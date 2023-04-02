@@ -9,7 +9,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,11 +22,13 @@ import com.example.watchbase.R
 import com.example.watchbase.data.model.Show
 import com.example.watchbase.ui.screens.designsystem.ActionButton
 import com.example.watchbase.ui.screens.designsystem.BackButton
+import com.example.watchbase.ui.viewmodel.DetailViewModel
 import com.example.watchbase.ui.viewmodel.HomeViewModel
 
 @Composable
 fun DetailScreen(
-    selectedShow: MutableState<Show?>,
+    homeViewModel: HomeViewModel,
+    detailViewModel: DetailViewModel,
     onClickAddToMyList: () -> Unit,
     onNavigateToHomeScreen: () -> Unit
 ) {
@@ -36,7 +37,7 @@ fun DetailScreen(
             .fillMaxWidth()
             .fillMaxHeight()
     ) {
-        selectedShow.value?.let {
+        homeViewModel.selectedShow.value?.let {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -98,7 +99,7 @@ fun Title(showTitle: String) {
 fun ShowDetails(selectedShow: Show) {
     Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         Text(
-            text = "★${selectedShow.voteAverage}",
+            text = "★ ${selectedShow.voteAverage}",
             fontSize = 14.sp,
             color = colorResource(id = R.color.text_color_secondary)
         )

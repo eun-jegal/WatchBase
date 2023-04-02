@@ -1,9 +1,7 @@
 package com.example.watchbase.data.remote.api
 
 import com.example.watchbase.BuildConfig
-import com.example.watchbase.data.model.GenreList
-import com.example.watchbase.data.model.Show
-import com.example.watchbase.data.model.ShowList
+import com.example.watchbase.data.model.*
 import kotlinx.coroutines.flow.Flow
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -59,15 +57,25 @@ interface TMDBService {
         apiKey: String = BuildConfig.API_KEY
     ): GenreList
 
-    @GET("tv/{tv_id}")
-    suspend fun getTvShowDetails(
+    @GET("tv/{tv_id}/similar")
+    suspend fun getSimilarTvShows(
         @Path("tv_id")
-        show_id: Int,
+        movieId: Int,
+        @Query("page")
+        page: Int = 1,
         @Query("language")
         language: String = "en",
         @Query("api_key")
         apiKey: String = BuildConfig.API_KEY
-    ): Show
+    ): ShowList
+
+    @GET("tv/{tv_id}/credits")
+    suspend fun getTvShowCasts(
+        @Path("tv_id")
+        showId: Int,
+        @Query("api_key")
+        apiKey: String = BuildConfig.API_KEY
+    ): CastList
 
     // Movies
     @GET("movie/top_rated")
@@ -128,13 +136,23 @@ interface TMDBService {
         apiKey: String = BuildConfig.API_KEY
     ): GenreList
 
-    @GET("movie/{movie_id}")
-    suspend fun getMovieDetails(
+    @GET("movie/{movie_id}/similar")
+    suspend fun getSimilarMovies(
         @Path("movie_id")
-        movie_id: Int,
+        movieId: Int,
+        @Query("page")
+        page: Int = 1,
         @Query("language")
         language: String = "en",
         @Query("api_key")
         apiKey: String = BuildConfig.API_KEY
-    ): Show
+    ): ShowList
+
+    @GET("movie/{movie_id}/credits")
+    suspend fun getMovieCasts(
+        @Path("movie_id")
+        showId: Int,
+        @Query("api_key")
+        apiKey: String = BuildConfig.API_KEY
+    ): CastList
 }
