@@ -7,6 +7,7 @@
     <string name="category_movies">Movies</string>
     <string name="genres">Genres</string>
     <string name="detail">Detail</string>
+    <string name="casts">Casts</string>
     <string name="title_trending">Trending</string>
     <string name="title_top_rated">Top Rated</string>
     <string name="title_popular">Popular</string>

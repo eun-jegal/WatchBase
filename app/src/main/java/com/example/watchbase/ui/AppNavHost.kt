@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.watchbase.R
+import com.example.watchbase.ui.screens.CastScreen
 import com.example.watchbase.ui.screens.DetailScreen
 import com.example.watchbase.ui.screens.Screen
 import com.example.watchbase.ui.screens.home.GenreScreen
@@ -37,7 +38,7 @@ fun AppNavHost(
                     homeViewModel = homeViewModel,
                     onNavigateToGenreScreen = { navController.navigate(Screen.Genres.route) },
                     onNavigateToDetailScreen = {
-                        homeViewModel.selectedShow.value = it
+                        homeViewModel.addSelectedShow(it)
                         navController.navigate(Screen.Detail.route)
                     }
                 )
@@ -59,9 +60,15 @@ fun AppNavHost(
                 DetailScreen(
                     homeViewModel = homeViewModel,
                     detailViewModel = detailViewModel,
-                    onClickAddToMyList = { /*TODO*/ }) {
-                    navController.navigate(Screen.Home.route)
-                }
+                    onNavigateToHomeScreen = { navController.navigate(Screen.Home.route) },
+                    onNavigateToCastScreen = { navController.navigate(Screen.Casts.route) }
+                )
+            }
+            composable(Screen.Casts.route) {
+                CastScreen(
+                    detailViewModel = detailViewModel,
+                    onNavigateToDetailScreen = { navController.popBackStack() }
+                )
             }
         })
 }

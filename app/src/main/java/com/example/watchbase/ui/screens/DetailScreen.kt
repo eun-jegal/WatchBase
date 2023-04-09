@@ -17,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
@@ -35,8 +34,8 @@ import com.example.watchbase.R
 import com.example.watchbase.data.model.Cast
 import com.example.watchbase.data.model.Show
 import com.example.watchbase.ui.screens.designsystem.ActionButton
-import com.example.watchbase.ui.screens.designsystem.BackButton
 import com.example.watchbase.ui.screens.designsystem.Heading
+import com.example.watchbase.ui.screens.designsystem.TopBar
 import com.example.watchbase.ui.viewmodel.DetailViewModel
 import com.example.watchbase.ui.viewmodel.HomeViewModel
 
@@ -44,8 +43,8 @@ import com.example.watchbase.ui.viewmodel.HomeViewModel
 fun DetailScreen(
     homeViewModel: HomeViewModel,
     detailViewModel: DetailViewModel,
-    onClickAddToMyList: () -> Unit,
-    onNavigateToHomeScreen: () -> Unit
+    onNavigateToHomeScreen: () -> Unit,
+    onNavigateToCastScreen: () -> Unit
 ) {
     homeViewModel.selectedShow.value?.let {
         LaunchedEffect(key1 = it) {
@@ -68,7 +67,13 @@ fun DetailScreen(
                 contentAlignment = Alignment.TopStart
             ) {
                 Poster(posterPath = it.backdropPath)
-                BackButton(onNavigateUp = { onNavigateToHomeScreen() })
+                TopBar(
+                    isNavigateUpAvailable = homeViewModel.selectedShows.size > 1,
+                    onNavigateUp = { homeViewModel.navigateUp() },
+                    onClickClose = {
+                        homeViewModel.clearSelectedShows()
+                        onNavigateToHomeScreen()
+                    })
             }
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -81,16 +86,22 @@ fun DetailScreen(
                 ShowDetails(selectedShow = it)
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Casts(castList = detailViewModel.cast.value)
+                Casts(
+                    castList = detailViewModel.cast.value,
+                    onNavigateToCastScreen = onNavigateToCastScreen
+                )
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Overview(overview = it.overview)
                 Spacer(modifier = Modifier.height(16.dp))
 
-                ActionButtons(onClickAddToMyList = onClickAddToMyList, onClickLikeShow = {})
+                ActionButtons(onClickAddToMyList = { }, onClickLikeShow = {})
                 Spacer(modifier = Modifier.height(16.dp))
 
-                SimilarMovies(showList = detailViewModel.similarShows.value.collectAsLazyPagingItems())
+                SimilarMovies(
+                    homeViewModel = homeViewModel,
+                    showList = detailViewModel.similarShows.value.collectAsLazyPagingItems()
+                )
             }
         }
     }
@@ -171,7 +182,8 @@ fun Overview(overview: String) {
 
 @Composable
 fun Casts(
-    castList: List<Cast>
+    castList: List<Cast>,
+    onNavigateToCastScreen: () -> Unit
 ) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
         Row(modifier = Modifier.weight(0.7f)) {
@@ -193,7 +205,9 @@ fun Casts(
         }
 
         Row(
-            modifier = Modifier.weight(0.3f),
+            modifier = Modifier
+                .weight(0.3f)
+                .clickable { onNavigateToCastScreen() },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End
         ) {
@@ -214,6 +228,7 @@ fun Casts(
 
 @Composable
 fun SimilarMovies(
+    homeViewModel: HomeViewModel,
     showList: LazyPagingItems<Show>
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -227,15 +242,14 @@ fun SimilarMovies(
                 ) {
                     items(showList) { show ->
                         show?.let {
-                            val imagePath = "${BuildConfig.BASE_POSTER_IMAGE_URL}${it.posterPath}"
                             AsyncImage(
-                                model = imagePath,
+                                model = "${BuildConfig.BASE_POSTER_IMAGE_URL}${it.posterPath}",
                                 contentScale = ContentScale.FillHeight,
                                 contentDescription = "Show",
                                 modifier = Modifier
                                     .height(200.dp)
                                     .clickable {
-
+                                        homeViewModel.addSelectedShow(show)
                                     }
                             )
                         }

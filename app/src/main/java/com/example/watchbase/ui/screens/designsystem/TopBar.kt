@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -12,8 +13,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun BackButton(
-    onNavigateUp: () -> Unit,
+fun TopBar(
+    isNavigateUpAvailable: Boolean,
+    onNavigateUp: () -> Unit = {},
+    onClickClose: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -22,12 +25,19 @@ fun BackButton(
             .padding(horizontal = 16.dp)
             .height(56.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.End
+        horizontalArrangement = if (isNavigateUpAvailable) Arrangement.SpaceBetween else Arrangement.End
     ) {
+        if (isNavigateUpAvailable) {
+            Icon(
+                imageVector = Icons.Default.ArrowBack,
+                tint = Color.White,
+                contentDescription = "Navigate Up",
+                modifier = modifier.clickable { onNavigateUp() })
+        }
         Icon(
             imageVector = Icons.Default.Close,
             tint = Color.White,
-            contentDescription = "close",
-            modifier = modifier.clickable { onNavigateUp() })
+            contentDescription = "Close",
+            modifier = modifier.clickable { onClickClose() })
     }
 }

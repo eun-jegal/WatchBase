@@ -3,6 +3,7 @@ package com.example.watchbase.ui.screens.home
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -17,6 +18,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
+import androidx.paging.compose.itemsIndexed
 import coil.compose.AsyncImage
 import com.example.watchbase.BuildConfig
 import com.example.watchbase.R
@@ -136,16 +138,17 @@ fun HeadingAndCarousel(
         when (showList.loadState.refresh) {
             is LoadState.NotLoading -> {
                 LazyRow(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    items(showList) { show ->
+                    itemsIndexed(showList) { index: Int, show: Show? ->
                         show?.let {
-                            val imagePath = "${BuildConfig.BASE_POSTER_IMAGE_URL}${it.posterPath}"
                             AsyncImage(
-                                model = imagePath,
+                                model = "${BuildConfig.BASE_POSTER_IMAGE_URL}${it.posterPath}",
                                 contentScale = ContentScale.FillHeight,
                                 contentDescription = "Show",
                                 modifier = Modifier
+                                    .padding(start = 8.dp)
                                     .clip(RoundedCornerShape(8.dp))
                                     .width(150.dp)
                                     .clickable {

@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import java.util.*
 
 class HomeViewModel(
     private val showRepository: ShowRepository,
@@ -28,7 +29,8 @@ class HomeViewModel(
 ) : ViewModel() {
     var selectedGenre: MutableState<Genre> = mutableStateOf(Genre(null, "Genre"))
     var selectedShowType: MutableState<ShowType> = mutableStateOf(ShowType.TV_SHOW)
-    var selectedShow: MutableState<Show?> = mutableStateOf(null)
+    var selectedShows: Stack<Show> = Stack()
+    val selectedShow: MutableState<Show?> = mutableStateOf(null)
 
     private val _genres = mutableStateListOf<Genre>()
     val genres: SnapshotStateList<Genre> = _genres
@@ -66,6 +68,21 @@ class HomeViewModel(
         if (showType == ShowType.MOVIE) {
             getUpcomingMovies(genreId)
         }
+    }
+
+    fun addSelectedShow(show: Show) {
+        selectedShows.add(show)
+        selectedShow.value = selectedShows.peek()
+    }
+
+    fun navigateUp() {
+        selectedShows.pop()
+        selectedShow.value = selectedShows.peek()
+    }
+
+    fun clearSelectedShows() {
+        selectedShows.clear()
+        selectedShow.value = null
     }
 
     private fun getGenreList() {

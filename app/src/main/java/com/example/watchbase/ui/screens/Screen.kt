@@ -10,4 +10,5 @@ sealed class Screen(val route: String, @DrawableRes val iconId: Int, @StringRes 
     object MyList : Screen("myList", R.drawable.ic_baseline_video_library_24, R.string.my_list)
     object Genres : Screen("genres", -1, R.string.genres)
     object Detail : Screen("detail", -1, R.string.detail)
+    object Casts: Screen("casts", -1, R.string.casts)
 }
