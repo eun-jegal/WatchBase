@@ -21,4 +21,6 @@ interface WatchBaseRemoteDataSource {
     suspend fun getMovieGenres(): GenreList
     suspend fun getMovieCasts(showId: Int): CastList
     suspend fun getSimilarMovies(showId: Int, page: Int): ShowList
+
+    suspend fun getTrendingShows(mediaType: String, timeWindow: String): ShowList
 }

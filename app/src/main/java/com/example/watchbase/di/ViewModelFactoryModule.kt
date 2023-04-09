@@ -2,9 +2,9 @@ package com.example.watchbase.di
 
 import com.example.watchbase.data.repository.GenreRepository
 import com.example.watchbase.data.repository.ShowRepository
-import com.example.watchbase.ui.viewmodel.DetailViewModel
 import com.example.watchbase.ui.viewmodel.factory.DetailViewModelFactory
 import com.example.watchbase.ui.viewmodel.factory.HomeViewModelFactory
+import com.example.watchbase.ui.viewmodel.factory.SearchViewModelFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,5 +29,13 @@ class ViewModelFactoryModule {
         showRepository: ShowRepository
     ): DetailViewModelFactory {
         return DetailViewModelFactory(showRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideSearchViewModelFactory(
+        showRepository: ShowRepository
+    ): SearchViewModelFactory {
+        return SearchViewModelFactory(showRepository)
     }
 }

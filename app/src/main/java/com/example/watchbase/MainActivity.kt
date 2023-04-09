@@ -14,8 +14,10 @@ import com.example.watchbase.ui.AppNavHost
 import com.example.watchbase.ui.BottomNavBar
 import com.example.watchbase.ui.viewmodel.DetailViewModel
 import com.example.watchbase.ui.viewmodel.HomeViewModel
+import com.example.watchbase.ui.viewmodel.SearchViewModel
 import com.example.watchbase.ui.viewmodel.factory.DetailViewModelFactory
 import com.example.watchbase.ui.viewmodel.factory.HomeViewModelFactory
+import com.example.watchbase.ui.viewmodel.factory.SearchViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -24,17 +26,25 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var homeViewModelFactory: HomeViewModelFactory
+
     @Inject
     lateinit var detailViewModelFactory: DetailViewModelFactory
 
+    @Inject
+    lateinit var searchViewModelFactory: SearchViewModelFactory
+
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var detailViewModel: DetailViewModel
+    private lateinit var searchViewModel: SearchViewModel
 
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         homeViewModel = ViewModelProvider(this, homeViewModelFactory)[HomeViewModel::class.java]
-        detailViewModel = ViewModelProvider(this, detailViewModelFactory)[DetailViewModel::class.java]
+        detailViewModel =
+            ViewModelProvider(this, detailViewModelFactory)[DetailViewModel::class.java]
+        searchViewModel =
+            ViewModelProvider(this, searchViewModelFactory)[SearchViewModel::class.java]
 
         setContent {
             val navController = rememberNavController()
@@ -45,6 +55,7 @@ class MainActivity : ComponentActivity() {
                     AppNavHost(
                         homeViewModel = homeViewModel,
                         detailViewModel = detailViewModel,
+                        searchViewModel = searchViewModel,
                         navController = navController,
                         modifier = Modifier
                     )

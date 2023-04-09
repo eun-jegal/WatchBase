@@ -133,13 +133,18 @@ fun HeadingAndCarousel(
             .fillMaxWidth()
             .padding(vertical = 8.dp)
     ) {
-        Heading(title = title)
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 8.dp)) {
+            Heading(title = title)
+        }
         Spacer(modifier = Modifier.height(12.dp))
         when (showList.loadState.refresh) {
             is LoadState.NotLoading -> {
                 LazyRow(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(horizontal = 8.dp)
                 ) {
                     itemsIndexed(showList) { index: Int, show: Show? ->
                         show?.let {
@@ -148,7 +153,6 @@ fun HeadingAndCarousel(
                                 contentScale = ContentScale.FillHeight,
                                 contentDescription = "Show",
                                 modifier = Modifier
-                                    .padding(start = 8.dp)
                                     .clip(RoundedCornerShape(8.dp))
                                     .width(150.dp)
                                     .clickable {

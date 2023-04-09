@@ -18,11 +18,13 @@ import com.example.watchbase.ui.screens.mylist.MyListScreen
 import com.example.watchbase.ui.screens.search.SearchScreen
 import com.example.watchbase.ui.viewmodel.DetailViewModel
 import com.example.watchbase.ui.viewmodel.HomeViewModel
+import com.example.watchbase.ui.viewmodel.SearchViewModel
 
 @Composable
 fun AppNavHost(
     homeViewModel: HomeViewModel,
     detailViewModel: DetailViewModel,
+    searchViewModel: SearchViewModel,
     navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
@@ -51,7 +53,12 @@ fun AppNavHost(
                 )
             }
             composable(Screen.Search.route) {
-                SearchScreen()
+                SearchScreen(
+                    searchViewModel = searchViewModel,
+                    onNavigateToDetailScreen = {
+                        homeViewModel.addSelectedShow(it)
+                        navController.navigate(Screen.Detail.route)
+                    })
             }
             composable(Screen.MyList.route) {
                 MyListScreen()

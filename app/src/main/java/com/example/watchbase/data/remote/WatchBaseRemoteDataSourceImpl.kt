@@ -70,4 +70,8 @@ class WatchBaseRemoteDataSourceImpl(
     override suspend fun getSimilarMovies(showId: Int, page: Int): ShowList {
         return tmdbService.getSimilarMovies(showId, page)
     }
+
+    override suspend fun getTrendingShows(mediaType: String, timeWindow: String): ShowList {
+        return tmdbService.getTrendingShows(mediaType, timeWindow)
+    }
 }

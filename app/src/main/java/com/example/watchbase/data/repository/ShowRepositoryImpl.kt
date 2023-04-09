@@ -5,6 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.watchbase.data.model.CastList
 import com.example.watchbase.data.model.Show
+import com.example.watchbase.data.model.ShowList
 import com.example.watchbase.data.model.ShowType
 import com.example.watchbase.data.remote.WatchBaseRemoteDataSource
 import com.example.watchbase.pagination.*
@@ -39,6 +40,12 @@ class ShowRepositoryImpl(
                 TrendingShowSource(remoteDataSource, showType)
             }
         ).flow
+    }
+
+    override suspend fun getTrendingShows(mediaType: String, timeWindow: String): Flow<ShowList> {
+        return flow {
+            emit(remoteDataSource.getTrendingShows(mediaType, timeWindow))
+        }
     }
 
     override suspend fun getNowPlayingShows(showType: ShowType): Flow<PagingData<Show>> {

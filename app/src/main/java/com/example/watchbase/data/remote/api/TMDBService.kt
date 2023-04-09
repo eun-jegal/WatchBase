@@ -155,4 +155,14 @@ interface TMDBService {
         @Query("api_key")
         apiKey: String = BuildConfig.API_KEY
     ): CastList
+
+    @GET("trending/{media_type}/{time_window}")
+    suspend fun getTrendingShows(
+        @Path("media_type")
+        mediaType: String,
+        @Path("time_window")
+        timeWindow: String = "week",
+        @Query("api_key")
+        apiKey: String = BuildConfig.API_KEY
+    ): ShowList
 }
