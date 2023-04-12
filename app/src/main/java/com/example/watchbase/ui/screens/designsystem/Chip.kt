@@ -1,19 +1,21 @@
 package com.example.watchbase.ui.screens.designsystem
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.watchbase.R
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -25,21 +27,14 @@ fun Chip(
 ) {
     Surface(
         color = when {
-            selected -> MaterialTheme.colors.onSurface
-            else -> Color.Transparent
+            selected -> colorResource(id = R.color.chip_background_selected)
+            else -> colorResource(id = R.color.chip_background_unselected)
         },
         contentColor = when {
-            selected -> MaterialTheme.colors.onPrimary
-            else -> Color.LightGray
+            selected -> Color.Black
+            else -> Color.White
         },
         shape = CircleShape,
-        border = BorderStroke(
-            width = 1.dp,
-            color = when {
-                selected -> MaterialTheme.colors.primary
-                else -> Color.LightGray
-            }
-        ),
         modifier = modifier,
         onClick = { onClick() }
     ) {
@@ -48,9 +43,10 @@ fun Chip(
         ) {
             Text(
                 text = text,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 12.sp,
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.body2,
-                modifier = modifier.padding(8.dp)
+                modifier = modifier.padding(horizontal = 12.dp, vertical = 6.dp)
             )
         }
     }

@@ -11,8 +11,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.watchbase.R
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -22,12 +26,12 @@ fun DropDownMenu(
     modifier: Modifier = Modifier
 ) {
     Surface(
-        color = Color.Transparent,
-        contentColor = Color.LightGray,
+        color = colorResource(id = R.color.chip_background_unselected),
+        contentColor = Color.White,
         shape = CircleShape,
         border = BorderStroke(
             width = 1.dp,
-            color = Color.LightGray
+            color = Color.White
         ),
         modifier = modifier,
         onClick = { onClick() }
@@ -37,9 +41,10 @@ fun DropDownMenu(
         ) {
             Text(
                 text = text,
+                fontWeight = FontWeight.Medium,
+                fontSize = 12.sp,
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.body2,
-                modifier = modifier.padding(start = 8.dp, top = 8.dp, bottom = 8.dp)
+                modifier = modifier.padding(start = 8.dp, top = 6.dp, bottom = 6.dp)
             )
             Icon(
                 imageVector = Icons.Default.ArrowDropDown,
