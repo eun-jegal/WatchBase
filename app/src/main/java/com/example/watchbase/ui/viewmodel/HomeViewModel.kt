@@ -35,8 +35,8 @@ class HomeViewModel(
     private val _genres = mutableStateListOf<Genre>()
     val genres: SnapshotStateList<Genre> = _genres
 
-    private var _trendingShows = mutableStateOf<Flow<PagingData<Show>>>(emptyFlow())
-    val trendingShows: State<Flow<PagingData<Show>>> = _trendingShows
+    private var _trendingShows = mutableStateOf<List<Show>>(emptyList())
+    val trendingShows: State<List<Show>> = _trendingShows
 
     private var _topRatedShows = mutableStateOf<Flow<PagingData<Show>>>(emptyFlow())
     val topRatedShows: State<Flow<PagingData<Show>>> = _topRatedShows
@@ -107,14 +107,8 @@ class HomeViewModel(
 
     private fun getTrendingShows(genreId: Int?, showType: ShowType) {
         viewModelScope.launch(Dispatchers.IO) {
-            _trendingShows.value = if (genreId != null) {
-                showRepository.getTrendingShows(showType).map { results ->
-                    results.filter { movie ->
-                        movie.genreIds!!.contains(genreId)
-                    }
-                }.cachedIn(viewModelScope)
-            } else {
-                showRepository.getTrendingShows(showType).cachedIn(viewModelScope)
+            showRepository.getTrendingShows(showType).collect {
+                _trendingShows.value = it.results
             }
         }
     }

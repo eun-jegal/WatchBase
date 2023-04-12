@@ -23,4 +23,5 @@ interface WatchBaseRemoteDataSource {
     suspend fun getSimilarMovies(showId: Int, page: Int): ShowList
 
     suspend fun getTrendingShows(mediaType: String, timeWindow: String): ShowList
+    suspend fun getSearchResult(query: String, page: Int): ShowList
 }

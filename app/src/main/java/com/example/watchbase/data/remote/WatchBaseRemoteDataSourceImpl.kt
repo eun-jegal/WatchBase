@@ -74,4 +74,8 @@ class WatchBaseRemoteDataSourceImpl(
     override suspend fun getTrendingShows(mediaType: String, timeWindow: String): ShowList {
         return tmdbService.getTrendingShows(mediaType, timeWindow)
     }
+
+    override suspend fun getSearchResult(query: String, page: Int): ShowList {
+        return tmdbService.getMultiSearchResult(query = query, page = page)
+    }
 }

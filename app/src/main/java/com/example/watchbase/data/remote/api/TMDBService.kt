@@ -12,7 +12,7 @@ interface TMDBService {
     @GET("tv/top_rated")
     suspend fun getTopRatedTvShows(
         @Query("page")
-        page: Int = 1,
+        page: Int = 0,
         @Query("language")
         language: String = "en",
         @Query("api_key")
@@ -22,7 +22,7 @@ interface TMDBService {
     @GET("tv/popular")
     suspend fun getPopularTvShows(
         @Query("page")
-        page: Int = 1,
+        page: Int = 0,
         @Query("language")
         language: String = "en",
         @Query("api_key")
@@ -32,7 +32,7 @@ interface TMDBService {
     @GET("trending/tv/week")
     suspend fun getTrendingTvShows(
         @Query("page")
-        page: Int = 1,
+        page: Int = 0,
         @Query("language")
         language: String = "en",
         @Query("api_key")
@@ -42,7 +42,7 @@ interface TMDBService {
     @GET("tv/on_the_air")
     suspend fun getNowPlayingTvShows(
         @Query("page")
-        page: Int = 1,
+        page: Int = 0,
         @Query("language")
         language: String = "en",
         @Query("api_key")
@@ -62,7 +62,7 @@ interface TMDBService {
         @Path("tv_id")
         movieId: Int,
         @Query("page")
-        page: Int = 1,
+        page: Int = 0,
         @Query("language")
         language: String = "en",
         @Query("api_key")
@@ -81,7 +81,7 @@ interface TMDBService {
     @GET("movie/top_rated")
     suspend fun getTopRatedMovies(
         @Query("page")
-        page: Int = 1,
+        page: Int = 0,
         @Query("language")
         language: String = "en",
         @Query("api_key")
@@ -91,7 +91,7 @@ interface TMDBService {
     @GET("movie/popular")
     suspend fun getPopularMovies(
         @Query("page")
-        page: Int = 1,
+        page: Int = 0,
         @Query("language")
         language: String = "en",
         @Query("api_key")
@@ -101,7 +101,7 @@ interface TMDBService {
     @GET("trending/movie/week")
     suspend fun getTrendingMovies(
         @Query("page")
-        page: Int = 1,
+        page: Int = 0,
         @Query("language")
         language: String = "en",
         @Query("api_key")
@@ -111,7 +111,7 @@ interface TMDBService {
     @GET("movie/now_playing")
     suspend fun getNowPlayingMovies(
         @Query("page")
-        page: Int = 1,
+        page: Int = 0,
         @Query("language")
         language: String = "en",
         @Query("api_key")
@@ -121,7 +121,7 @@ interface TMDBService {
     @GET("movie/upcoming")
     suspend fun getUpcomingMovies(
         @Query("page")
-        page: Int = 1,
+        page: Int = 0,
         @Query("language")
         language: String = "en",
         @Query("api_key")
@@ -141,7 +141,7 @@ interface TMDBService {
         @Path("movie_id")
         movieId: Int,
         @Query("page")
-        page: Int = 1,
+        page: Int = 0,
         @Query("language")
         language: String = "en",
         @Query("api_key")
@@ -162,6 +162,18 @@ interface TMDBService {
         mediaType: String,
         @Path("time_window")
         timeWindow: String = "week",
+        @Query("api_key")
+        apiKey: String = BuildConfig.API_KEY
+    ): ShowList
+    
+    @GET("search/multi")
+    suspend fun getMultiSearchResult(
+        @Query("query")
+        query: String,
+        @Query("page")
+        page: Int = 0,
+        @Query("language")
+        language: String = "en",
         @Query("api_key")
         apiKey: String = BuildConfig.API_KEY
     ): ShowList

@@ -161,17 +161,23 @@ fun ActionButtons(
             .fillMaxWidth()
             .height(36.dp)
     ) {
-        ActionButton(imageVector = Icons.Default.Add, label = "MY LIST", modifier = Modifier
-            .weight(1f)
-            .fillMaxHeight()
-            .border(width = 1.dp, color = Color.White, shape = RoundedCornerShape(4.dp))
-            .clickable { onClickAddToMyList() })
+        ActionButton(imageVector = Icons.Default.Add,
+            label = "MY LIST",
+            contentColor = Color.White,
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight()
+                .border(width = 1.dp, color = Color.White, shape = RoundedCornerShape(4.dp))
+                .clickable { onClickAddToMyList() })
         Spacer(modifier = Modifier.width(8.dp))
-        ActionButton(imageVector = Icons.Default.FavoriteBorder, label = "LIKE", modifier = Modifier
-            .weight(1f)
-            .fillMaxHeight()
-            .border(width = 1.dp, color = Color.White, shape = RoundedCornerShape(4.dp))
-            .clickable { onClickLikeShow() })
+        ActionButton(imageVector = Icons.Default.FavoriteBorder,
+            label = "LIKE",
+            contentColor = Color.White,
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight()
+                .border(width = 1.dp, color = Color.White, shape = RoundedCornerShape(4.dp))
+                .clickable { onClickLikeShow() })
     }
 }
 

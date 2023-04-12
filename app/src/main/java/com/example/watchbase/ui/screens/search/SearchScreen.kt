@@ -1,15 +1,12 @@
 package com.example.watchbase.ui.screens.search
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -20,17 +17,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import com.example.watchbase.BuildConfig
 import com.example.watchbase.R
 import com.example.watchbase.data.model.Show
 import com.example.watchbase.ui.screens.designsystem.Heading
+import com.example.watchbase.ui.screens.designsystem.SearchBar
 import com.example.watchbase.ui.viewmodel.SearchViewModel
 
 @Composable
@@ -39,54 +37,43 @@ fun SearchScreen(
     onNavigateToDetailScreen: (Show) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val searchQuery = searchViewModel.searchQuery.value
+    val searchResult = searchViewModel.searchResult.value.collectAsLazyPagingItems()
+
     Column(
         modifier = modifier
             .fillMaxSize()
             .padding(start = 8.dp, end = 8.dp, top = 16.dp)
     ) {
-        SearchBar()
+        SearchBar(searchViewModel = searchViewModel, doSearch = { searchViewModel.search() })
         Spacer(modifier = Modifier.height(16.dp))
 
-        TopSearchList(
-            showList = searchViewModel.trendingShows.value,
-            onNavigateToDetailScreen = onNavigateToDetailScreen
-        )
-    }
-}
-
-@Composable
-fun SearchBar() {
-    BasicTextField(
-        value = "",
-        onValueChange = {},
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(42.dp)
-            .background(
-                color = colorResource(id = R.color.search_field_background),
-                shape = CircleShape
-            ),
-        singleLine = true,
-        decorationBox = {
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically,
+        if (searchQuery.isEmpty()) {
+            TopSearchList(
+                showList = searchViewModel.topSearchShows.value,
+                onNavigateToDetailScreen = onNavigateToDetailScreen
+            )
+        }
+        if (searchResult.itemCount > 0) {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(3),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_baseline_search_24),
-                    contentDescription = "",
-                    tint = Color.LightGray
-                )
-                Text(
-                    text = stringResource(id = R.string.search),
-                    fontSize = 18.sp,
-                    color = Color.LightGray
-                )
+                when (searchResult.loadState.refresh) {
+                    is LoadState.NotLoading -> {
+                        items(searchResult.itemCount) { index: Int ->
+                            searchResult[index]?.let { show ->
+                                SearchItem(
+                                    show = show,
+                                    onNavigateToDetailScreen = { onNavigateToDetailScreen(show) })
+                            }
+                        }
+                    }
+                }
             }
-        })
+        }
+    }
 }
 
 @Composable
@@ -156,4 +143,23 @@ fun SearchResult(
             tint = Color.White
         )
     }
+}
+
+@Composable
+fun SearchItem(
+    show: Show,
+    onNavigateToDetailScreen: (Show) -> Unit
+) {
+    AsyncImage(
+        model = "${BuildConfig.BASE_POSTER_IMAGE_URL}${show.posterPath}",
+        contentScale = ContentScale.FillBounds,
+        contentDescription = "Show",
+        modifier = Modifier
+            .clip(RoundedCornerShape(8.dp))
+            .fillMaxWidth()
+            .height(180.dp)
+            .clickable {
+                onNavigateToDetailScreen(show)
+            }
+    )
 }

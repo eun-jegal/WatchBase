@@ -1,14 +1,8 @@
 package com.example.watchbase.ui.screens.designsystem
 
-import android.graphics.drawable.Icon
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +15,7 @@ import androidx.compose.ui.unit.sp
 fun ActionButton(
     imageVector: ImageVector,
     label: String,
+    contentColor: Color,
     modifier: Modifier
 ) {
     Row(
@@ -30,14 +25,14 @@ fun ActionButton(
     ) {
         Icon(
             imageVector = imageVector,
-            tint = Color.White,
-            contentDescription = label,
-            modifier = Modifier.padding(end = 6.dp)
+            tint = contentColor,
+            contentDescription = label
         )
+        Spacer(modifier = Modifier.width(6.dp))
         Text(
             text = label,
             fontSize = 16.sp,
-            color = Color.White
+            color = contentColor
         )
     }
 }

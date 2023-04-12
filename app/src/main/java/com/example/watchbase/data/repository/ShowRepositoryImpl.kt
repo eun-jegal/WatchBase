@@ -33,18 +33,11 @@ class ShowRepositoryImpl(
         ).flow
     }
 
-    override suspend fun getTrendingShows(showType: ShowType): Flow<PagingData<Show>> {
-        return Pager(
-            config = PagingConfig(enablePlaceholders = false, pageSize = 20),
-            pagingSourceFactory = {
-                TrendingShowSource(remoteDataSource, showType)
-            }
-        ).flow
-    }
-
-    override suspend fun getTrendingShows(mediaType: String, timeWindow: String): Flow<ShowList> {
-        return flow {
-            emit(remoteDataSource.getTrendingShows(mediaType, timeWindow))
+    override suspend fun getTrendingShows(showType: ShowType): Flow<ShowList> {
+        return if (showType == ShowType.TV_SHOW) {
+            flow { emit(remoteDataSource.getTrendingTvShows(1)) }
+        } else {
+            flow { emit(remoteDataSource.getTrendingMovies(1)) }
         }
     }
 

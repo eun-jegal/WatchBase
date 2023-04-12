@@ -1,6 +1,7 @@
 package com.example.watchbase.di
 
 import com.example.watchbase.data.repository.GenreRepository
+import com.example.watchbase.data.repository.SearchRepository
 import com.example.watchbase.data.repository.ShowRepository
 import com.example.watchbase.ui.viewmodel.factory.DetailViewModelFactory
 import com.example.watchbase.ui.viewmodel.factory.HomeViewModelFactory
@@ -34,8 +35,8 @@ class ViewModelFactoryModule {
     @Singleton
     @Provides
     fun provideSearchViewModelFactory(
-        showRepository: ShowRepository
+        searchRepository: SearchRepository
     ): SearchViewModelFactory {
-        return SearchViewModelFactory(showRepository)
+        return SearchViewModelFactory(searchRepository)
     }
 }
