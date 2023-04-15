@@ -11,6 +11,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -137,7 +138,7 @@ fun SearchResult(
             )
         }
         Icon(
-            imageVector = Icons.Default.ArrowForward,
+            imageVector = Icons.Default.KeyboardArrowRight,
             contentDescription = "View Detail",
             modifier = Modifier.clickable { onNavigateToDetailScreen(show) },
             tint = Color.White
