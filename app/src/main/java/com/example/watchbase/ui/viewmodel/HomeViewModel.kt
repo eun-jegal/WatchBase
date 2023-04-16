@@ -32,8 +32,9 @@ class HomeViewModel(
     var selectedShows: Stack<Show> = Stack()
     val selectedShow: MutableState<Show?> = mutableStateOf(null)
 
-    private val _genres = mutableStateListOf<Genre>()
-    val genres: SnapshotStateList<Genre> = _genres
+    private val _tvShowGenres = mutableStateListOf<Genre>()
+    private val _movieGenres = mutableStateListOf<Genre>()
+    val genres: SnapshotStateList<Genre> = if (selectedShowType.value == ShowType.TV_SHOW) _tvShowGenres else _movieGenres
 
     private var _trendingShows = mutableStateOf<List<Show>>(emptyList())
     val trendingShows: State<List<Show>> = _trendingShows
@@ -86,11 +87,16 @@ class HomeViewModel(
     }
 
     private fun getGenreList() {
+        updateGenreList(_tvShowGenres, ShowType.TV_SHOW)
+        updateGenreList(_movieGenres, ShowType.MOVIE)
+    }
+
+    private fun updateGenreList(list: SnapshotStateList<Genre>, showType: ShowType) {
         viewModelScope.launch(Dispatchers.IO) {
             val defaultGenre = Genre(null, "All")
-            when (val genreList = genreRepository.getGenres(selectedShowType.value)) {
+            when (val genreList = genreRepository.getGenres(showType)) {
                 is Resource.Success -> {
-                    _genres.run {
+                    list.run {
                         clear()
                         add(defaultGenre)
                         genreList.data?.genres?.forEach {

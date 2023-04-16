@@ -8,6 +8,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +33,7 @@ import androidx.paging.compose.itemsIndexed
 import coil.compose.AsyncImage
 import com.example.watchbase.BuildConfig
 import com.example.watchbase.R
+import com.example.watchbase.data.model.Genre
 import com.example.watchbase.data.model.Show
 import com.example.watchbase.data.model.ShowType
 import com.example.watchbase.ui.screens.designsystem.Chip
@@ -83,6 +85,7 @@ fun HeroSection(
 
         TrendingShowsInPager(
             shows = shows,
+            genres = homeViewModel.genres,
             pagerState = pagerState,
             onNavigateToDetailScreen = onNavigateToDetailScreen
         )
@@ -106,6 +109,7 @@ fun HeroSection(
 @Composable
 fun TrendingShowsInPager(
     shows: List<Show>,
+    genres: List<Genre>,
     pagerState: PagerState,
     onNavigateToDetailScreen: (Show) -> Unit
 ) {
@@ -142,8 +146,7 @@ fun TrendingShowsInPager(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(150.dp)
-                        .padding(start = 48.dp, bottom = 24.dp),
+                        .padding(start = 24.dp),
                     verticalAlignment = Alignment.Top
                 ) {
                     val colonIndex = show.title.indexOf(':')
@@ -151,7 +154,7 @@ fun TrendingShowsInPager(
                     val title = if (colonIndex != -1 && spaceIndex != -1) "${
                         show.title.substring(
                             0,
-                            colonIndex
+                            colonIndex + 1
                         )
                     }\n${show.title.substring(spaceIndex + 1)}" else show.title
                     Text(
@@ -161,7 +164,24 @@ fun TrendingShowsInPager(
                         color = Color.White
                     )
                 }
-                //ToDO: Genre
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 24.dp, bottom = 60.dp)
+                ) {
+                    val showGenres = genres.filter { genre ->
+                        return@filter if (show.genreIds.isNullOrEmpty()) false else show.genreIds.contains(
+                            genre.id
+                        )
+                    }
+                    showGenres.forEachIndexed { index, genre ->
+                        if (index == showGenres.lastIndex) {
+                            Text(text = genre.name, fontSize = 14.sp, color = Color.White)
+                        } else {
+                            Text(text = "${genre.name} · ", fontSize = 14.sp, color = Color.White)
+                        }
+                    }
+                }
             }
         }
     }
@@ -175,21 +195,22 @@ fun TrendingShowPageIndicator(
 ) {
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .height(20.dp),
-        horizontalArrangement = Arrangement.Center,
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.End,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        repeat(showSize) { iteration ->
-            val color =
-                if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
-            Box(
-                modifier = Modifier
-                    .padding(2.dp)
-                    .clip(CircleShape)
-                    .background(color)
-                    .size(5.dp)
-            )
+        Row(
+            modifier = Modifier
+                .background(
+                    color = colorResource(id = R.color.chip_background_unselected),
+                    shape = CircleShape
+                )
+                .padding(horizontal = 8.dp, vertical = 4.dp),
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Text(text = (pagerState.currentPage + 1).toString(), color = Color.Red)
+            Text(text = "/", color = Color.LightGray)
+            Text(text = showSize.toString(), color = Color.LightGray)
         }
     }
 }
