@@ -38,6 +38,7 @@ import com.example.watchbase.ui.screens.designsystem.Heading
 import com.example.watchbase.ui.screens.designsystem.TopBar
 import com.example.watchbase.ui.viewmodel.DetailViewModel
 import com.example.watchbase.ui.viewmodel.HomeViewModel
+import kotlin.math.roundToInt
 
 @Composable
 fun DetailScreen(
@@ -75,13 +76,13 @@ fun DetailScreen(
                         onNavigateToHomeScreen()
                     })
             }
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             Column(
                 modifier = Modifier.padding(horizontal = 16.dp)
             ) {
                 Title(showTitle = it.title)
-                Spacer(modifier = Modifier.height(2.dp))
+                Spacer(modifier = Modifier.height(4.dp))
 
                 ShowDetails(selectedShow = it)
                 Spacer(modifier = Modifier.height(8.dp))
@@ -134,7 +135,7 @@ fun Title(showTitle: String) {
 fun ShowDetails(selectedShow: Show) {
     Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         Text(
-            text = "★ ${selectedShow.voteAverage}",
+            text = "★ ${(selectedShow.voteAverage * 100.0).roundToInt() / 100.0}",
             fontSize = 14.sp,
             color = colorResource(id = R.color.text_color_secondary)
         )
@@ -161,15 +162,6 @@ fun ActionButtons(
             .fillMaxWidth()
             .height(36.dp)
     ) {
-        ActionButton(imageVector = Icons.Default.Add,
-            label = "MY LIST",
-            contentColor = Color.White,
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight()
-                .border(width = 1.dp, color = Color.White, shape = RoundedCornerShape(4.dp))
-                .clickable { onClickAddToMyList() })
-        Spacer(modifier = Modifier.width(8.dp))
         ActionButton(imageVector = Icons.Default.FavoriteBorder,
             label = "LIKE",
             contentColor = Color.White,
@@ -178,6 +170,15 @@ fun ActionButtons(
                 .fillMaxHeight()
                 .border(width = 1.dp, color = Color.White, shape = RoundedCornerShape(4.dp))
                 .clickable { onClickLikeShow() })
+        Spacer(modifier = Modifier.width(8.dp))
+        ActionButton(imageVector = Icons.Default.Add,
+            label = "MY LIST",
+            contentColor = Color.White,
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight()
+                .border(width = 1.dp, color = Color.White, shape = RoundedCornerShape(4.dp))
+                .clickable { onClickAddToMyList() })
     }
 }
 

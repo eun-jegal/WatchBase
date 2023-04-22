@@ -51,4 +51,8 @@ class SearchViewModel(
             }
         }
     }
+
+    fun clearSearchResult() {
+        _searchResult.value = emptyFlow()
+    }
 }
