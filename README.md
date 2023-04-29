@@ -90,5 +90,6 @@
 
 <!-- Open APIs -->
 <h2>Open APIs</h2>
-<p>Top News using the <a href="https://newsapi.org//">NewsAPI</a> for fetching JSON object from the server. News API provides articles and breaking news headlines from news sources and blogs across the web with JSON API.</p>
+<img src="https://user-images.githubusercontent.com/57670625/235322353-9a0a67f6-757f-4df9-9cb7-0849263735af.svg" align="right" width="21%"/>
+<p>Watchbase uses <a href="https://www.themoviedb.org/documentation/api">TMDB API</a> for fetching data from the server. TMDB API provides detailed information about TV shows, movies and casts.</p>
  
