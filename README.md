@@ -54,15 +54,15 @@
    </ul>
 </ul>
 <p align="center">
-   <img src="https://user-images.githubusercontent.com/57670625/224512399-9515be20-a3e7-462a-9a8e-120c3511adab.jpg"/>
+   <img src="https://user-images.githubusercontent.com/57670625/235998527-f9f34484-2fdf-42bf-b792-c2d14e5f75b0.jpg"/>
 </p>
 
 <h3>Architecture Overview</h3>
-<p>Top News is composed with three different layers - UI layer, domain layer and data layer. Each layer has app components which have different responsibilities.</p>
+<p>WatchBase is composed with two main layers - UI layer and data layer. Each layer has app components which have different responsibilities.</p>
 
 <h3>UI Layer</h3>
 <p align="center">
-   <img src="https://user-images.githubusercontent.com/57670625/222527163-ff9135ae-428a-4306-a10e-37b76066cbc9.jpg"/>
+   <img src="https://user-images.githubusercontent.com/57670625/235998520-af3b3e40-af2e-4b47-b4bd-5681a165ed87.jpg" width="80%"/>
 </p>
 <p>UI layer displays the application data and serves as the primary point for user interactions. Whenever the app data changes, the UI should update to reflect changes made by either user interaction or external input.</p>
 <ul>
@@ -70,16 +70,11 @@
   <li>NewsViewModel holds state and plays as a bridge between UI elements and the data layer</li>
   <li>UI elements request actions to ViewModel and observer ViewModel's livedatas to automatically update screens</li>
 </ul>
-
-<h3>Domain Layer</h3>
-<p align="center">
-   <img src="https://user-images.githubusercontent.com/57670625/222527239-0513a887-4d69-408d-9e51-87093c4f8aaa.jpg"/>
-</p>
-<p>Domain layer is optional layer for the modern architectural pattern. However, when the app is a large scale app and has complex functionalities, the domain layer helps to avoid code duplications and improves readability of codes. Top News has seven main use cases and these classes fit between ViewModel and the data layer(Repository).</p>
+<br>
 
 <h3>Data Layer</h3>
 <p align="center">
-   <img src="https://user-images.githubusercontent.com/57670625/222527292-cd2b4364-a622-4354-bb46-cbd46a9ebcf8.jpg"/>
+   <img src="https://user-images.githubusercontent.com/57670625/235998523-75cecf15-6e0b-4fbd-86f8-25b31a23b9a5.jpg" width="80%"/>
 </p>
 <p>Data layer is reponsible for containing application data and business logics. The data layer is consisted of repositories and data sources. It is important to keep each repository as a single source of truth.</p>
 <ul>
