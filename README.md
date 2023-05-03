@@ -23,20 +23,15 @@
       <li><a href="https://developer.android.com/topic/architecture">MVVM Pattern</a>: Industry-recognized software architecure pattern supported by Google</li>
     </ul>
  </li>
- <li>Jetpack Compose
-  <ul>
-    <li>ViewModel: Exposes data streams as a state holder</li>
-    <li>Lifecycle: Observes Android lifecycles and handle operations to a change in the lifecycle status</li>
-    <li><a href="https://developer.android.com/training/data-storage/room">Room</a>: Data Object Mapping library providing an abstract layer over SQLite</li>
-    <li>Navigation: Supports implementing navigation through multiple fragments</li>
-    <li><a href="https://developer.android.com/training/dependency-injection/hilt-android">Hilt</a>: Dependency injection library built on top of Dagger benefit from the compile-time correctness, runtime performance, scalability, and Android Studio support </li>
-  </ul>
-</li>
+<li><a href="https://developer.android.com/jetpack/compose/documentation">Jetpack Compose</a>: Modern toolkit for building Android user interfaces using a declarative programming model</li>
+<li><a href="https://developer.android.com/topic/libraries/architecture/paging/v3-overview">Jetpack Pagination</a>: Library helps you load and display pages of data from a larger dataset from local storage or over network.</li>
+<li><a href="https://developer.android.com/jetpack/compose/state">ViewModel</a>: Exposes data streams as a state holder</li>
+<li><a href="https://developer.android.com/training/dependency-injection/hilt-android">Hilt</a>: Dependency injection library built on top of Dagger benefit from the compile-time correctness, runtime performance, scalability, and Android Studio support </li>
 <li><a href="https://developer.android.com/kotlin/coroutines">Coroutines</a>: Concurrency design pattern provided by Kotlin</li>
 <li><a href="https://square.github.io/retrofit/">Retrofit</a>: Type-safe REST client for Android, Java and Kotlin developed by Square.  </li>
 <li><a href="https://square.github.io/okhttp/">OkHttp</a> : 3rd party library sending and receive HTTP-based network requests built on top of the Okio library</li>
 <li><a href="https://github.com/google/gson">GSON</a>: Java library that can be used to convert Java Objects into their JSON representation</li>
-<li><a href="https://github.com/bumptech/glide">Glide</a>: Fast and efficient open source media management and image loading framework </li>
+<li><a href="https://developer.android.com/training/data-storage/room">Room</a>: Abstraction layer over SQLite to allow fluent database access while harnessing the full power of SQLite.</li>
 </ul>
 <br>
 
